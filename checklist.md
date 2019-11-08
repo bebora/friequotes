@@ -1,0 +1,10 @@
+-[ ] Ricerca utenti
+-[ ] Ricerca hashtag
+-[ ] Ricerca post solo titoli
+-[ ] Ricerca post anche descrizione
+-[ ] Suggerimenti ricerca per tipi diversi da quello cercato
+-[ ] Aggiunta media per post
+-[ ] Aggiunta media per utente
+-[ ] Aggiunta immagine profilo utente
+-[ ] Visualizzare immagine profilo ridotta nella ricerca
+-[ ] Limite upload totale

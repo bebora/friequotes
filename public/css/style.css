@@ -1,0 +1,191 @@
+label {
+	display: block;
+	margin: 5px 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+td,
+th {
+	padding: 5px;
+	border-bottom: 1px solid #aaa;
+}
+
+table tr td a {
+    display:block;
+    height:100%;
+    width:100%;
+}
+
+table tr td {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+body {
+    margin: 0 auto auto auto;
+    width: 50%;
+    padding: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+    background: linear-gradient(90deg, lightblue 0%, #22227d 24%, cornflowerblue 24%, cornflowerblue 76%, #22227d 76%, lightblue 100%);
+    font-size: 20px;
+}
+
+.userinfo, .userphoto {
+    display:inline-block;
+    width: 49%;
+}
+.infoandphoto {
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width: 1100px) {
+    body {
+        width: 70%;
+        background: linear-gradient(90deg, lightblue 0%, #22227d 14%, cornflowerblue 14%, cornflowerblue 86%, #22227d 86%, lightblue 100%);
+    }
+}
+@media only screen and (max-width: 800px) {
+    body {
+        width: 100%;
+        background: cornflowerblue;
+        padding: 0px;
+    }
+    .userinfo, .userphoto {
+        display:block;
+        width: 100%;
+    }
+    .infoandphoto {
+        display: block;
+        align-items: center;
+    }
+}
+
+li{
+    margin: 13px 0;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0 4px 0 4px;
+    margin: 10px 0 0 0;
+}
+
+.titlecard {
+    font-size: 23px;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 5px 0 5px;
+}
+
+.titlecard p {
+    box-sizing: border-box;
+    margin: 5px;
+}
+
+.desccard {
+    font-size: 20px;
+    margin: 5px;
+    display: inline-block;
+    color:inherit;
+}
+.postcard {
+    background: linear-gradient(lightblue 0%, white 100%);
+    border-radius: 10px;
+    border: #22227d solid 1px;
+    height: auto;
+    margin: 0 2px 4px 2px;
+    padding: 5px;
+
+}
+
+.arrows {
+    width: 50%;
+    margin: auto;
+    height: auto;
+    overflow: hidden;
+}
+.arrow {
+    font-size: 50px;
+    text-decoration: none;
+}
+
+p, button, input {
+    font-size: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+a {
+    color:inherit;
+    color:inherit;
+}
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.usertag {
+    background: linear-gradient(lightblue 0%, white 100%);
+    border-radius: 5px;
+    border: black solid 2px;
+    padding: 3px;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.usertag a {
+    text-decoration: none;
+}
+
+.posttitle, .postdesc {
+    background-color: white;
+    padding: 5px;
+    margin: 0 0 0 0;
+
+}
+.posttitle {
+    background: linear-gradient(#aaf 0%, lightblue 100%);
+    border-bottom: solid #00c 2px;
+    color: #00c;
+    overflow: hidden;
+}
+.titlecard1 {
+    font-size: 26px
+}
+.timetitlecard {
+    float: right;
+    margin-right: 10px;
+    color: #333
+}
+.postbox {
+    margin-top: 10px;
+    border-radius: 10px;
+    border: #00c solid 2px;
+    overflow: hidden;
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.75);
+}
+
+.postlist {
+    width: 98%;
+    margin: auto;
+}
+
+.nounderline {
+    text-decoration: none;
+}
