@@ -34,3 +34,15 @@ CREATE TABLE IF NOT EXISTS entitiesmedia (
 	mediapath TEXT,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    username TEXT not NULL,
+    userid INTEGER primary key,
+    auth_level INTEGER NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tokens (
+    userid INTEGER,
+    token TEXT unique
+);

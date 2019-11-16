@@ -16,7 +16,7 @@ var uploadmedia = function(type) {
         formData.append('type', type);
         formData.append('csrf', csrftoken);
         let urlParams = new URLSearchParams(window.location.search);
-        formData.append('userid', urlParams.get('id'));
+        formData.append('id', urlParams.get('id'));
         console.log(...formData);
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'uploadmedia.php', true);

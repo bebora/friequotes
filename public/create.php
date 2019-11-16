@@ -1,12 +1,12 @@
 <?php
 
 require "../common.php";
-
+check_token(LoginLevel::MODERATOR);
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try  {
-    $connection = getdb();
+    $connection = get_db();
     $new_user = array("name" => $_POST['name']);
     $sql = sprintf(
       "INSERT INTO %s (%s) values (%s)",

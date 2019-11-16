@@ -1,10 +1,10 @@
 <?php
 
 require "../common.php";
-
+check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
     try  {
-        $connection = getdb();
+        $connection = get_db();
         $stmt = $connection->prepare('SELECT * FROM entities WHERE id = :id');
         $id = $_GET['id'];
         $stmt->bindParam(':id', $id);
@@ -12,7 +12,12 @@ if (isset($_GET['id'])) {
         $result = $stmt->fetch();
         $name = $result['name'];
         $picpath = 'uploads/' .$result['propicpath'];
-        $resultinfo = '<div class="userphoto"><img src="' . $picpath . '" alt="' . 'Foto profilo non esistente"></div>' .
+        $resultinfo = '<div class="userphotocontainer">
+                            <a href="' . $picpath . '" target="_blank">
+                              <img class="userphoto" src="' . $picpath . '" alt="' . 'Foto profilo non esistente">
+                            </a>
+                            
+                       </div>' .
             '<div class="userinfo" style="padding: 5px">Nome: ' . $name . '<br>Compleanno: ' . $result['birthday'] . '</div>';
 
         $sql = "SELECT  *

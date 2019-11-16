@@ -4,7 +4,7 @@
  */
 include 'common.php';
 try {
-    $connection = getdb();
+    $connection = get_db();
     $sql = file_get_contents("data/init.sql");
     $connection->exec($sql);
     echo "Database and table users created successfully.";

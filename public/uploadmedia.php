@@ -3,6 +3,7 @@
 
 require "../common.php";
 define ('SITE_ROOT', realpath(getcwd()));
+check_token(LoginLevel::USER);
 
 // Code from https://pqina.nl/blog/creating-thumbnails-with-php/
 // Link image type to correct image loader and saver
@@ -169,20 +170,20 @@ if ($uploadOk == 0) {
     $finalName = $target_file . time() . '.' .$imageFileType;
     $pathname = SITE_ROOT . $target_dir . $finalName;
     if (isset($_POST['type'])) {
-        if ($_POST['type'] == 'userpropic' && isset($_POST['userid'])) {
-            $connection = getdb();
+        if ($_POST['type'] == 'userpropic' && isset($_POST['id'])) {
+            $connection = get_db();
             $sql = "UPDATE entities 
                     SET propicpath = :path
                     WHERE id = :id";
             $statement = $connection->prepare($sql);
             $statement->bindParam(':path', $finalName, PDO::PARAM_STR);
-            $statement->bindParam(':id', $_POST['userid'], PDO::PARAM_INT);
+            $statement->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
             $statement->execute();
         }
-        if ($_POST['type'] == 'usermedia' && isset($_POST['userid'])) {
-            $connection = getdb();
+        if ($_POST['type'] == 'usermedia' && isset($_POST['id'])) {
+            $connection = get_db();
             $new_media = array(
-                "entityid" => $_POST['userid'],
+                "entityid" => $_POST['id'],
                 "mediapath" => $finalName,
                 "created" => date("c")
             );

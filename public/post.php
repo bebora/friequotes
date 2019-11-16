@@ -1,10 +1,10 @@
 <?php
 
 require "../common.php";
-
+check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
     try  {
-        $connection = getdb();
+        $connection = get_db();
         $stmt = $connection->prepare('SELECT * FROM posts WHERE id = :id');
         $id = $_GET['id'];
         $stmt->bindParam(':id', $id);

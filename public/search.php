@@ -5,13 +5,14 @@
  * a parameter: in this case, location.
  *
  */
-
 require "../common.php";
+check_token(LoginLevel::GUEST);
+
 
 if (isset($_GET['query'])) {
     $mode = 2;
     try {
-        $connection = getdb();
+        $connection = get_db();
         if (isset($_GET['query'][0])) {
             // $string is greater than 0
             switch ($_GET['query'][0]):

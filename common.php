@@ -4,13 +4,24 @@ session_cache_limiter(false);
 session_start();
 
 if (empty($_SESSION['csrf'])) {
-	if (function_exists('random_bytes')) {
-		$_SESSION['csrf'] = bin2hex(random_bytes(32));
-	} else if (function_exists('mcrypt_create_iv')) {
-		$_SESSION['csrf'] = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
-	} else {
-		$_SESSION['csrf'] = bin2hex(openssl_random_pseudo_bytes(32));
-	}
+    $_SESSION['csrf'] = gen_random_bytes();
+}
+
+function gen_random_bytes() {
+    $length = 32;
+    if (function_exists('random_bytes')) {
+        return bin2hex(random_bytes($length));
+    }
+    if (function_exists('mcrypt_create_iv')) {
+        return bin2hex(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM));
+    }
+    else {
+        return bin2hex(openssl_random_pseudo_bytes($length));
+    }
+}
+
+function get_db() {
+    return new PDO("sqlite:" . dirname(__FILE__) .  "/data/db.sqlite");
 }
 
 /**
@@ -18,13 +29,10 @@ if (empty($_SESSION['csrf'])) {
  *
  */
 
-function getdb() {
-    return new PDO("sqlite:" . dirname(__FILE__) .  "/data/db.sqlite");
-}
 function escape($html) {
     return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
 }
-function getrelevantdatediff($date) {
+function get_relevant_date_diff($date) {
     try {
         $diff = date_diff(new DateTime(), new DateTime($date));
         if ($diff->y > 0) {
@@ -57,7 +65,7 @@ function renderpost($post) {
         <div class="postbox">
             <div class="posttitle" style="position: relative;">
                 <span class="titlecard1">' . escape($post["title"]) . '</span>
-                <span class="timetitlecard">' . getrelevantdatediff($post["created"]) . ' fa</span>
+                <span class="timetitlecard">' . get_relevant_date_diff($post["created"]) . ' fa</span>
             </div>
             <p class="postdesc">' . escape($post["description"]) . '</p>
         </div>
@@ -73,4 +81,68 @@ function renderposts($result, $pagelimit) {
     return $strbuilder;
 }
 
+class LoginLevel
+{
+    const GUEST = 0;
+    const USER = 1;
+    const MODERATOR = 2;
+    const ADMIN = 3;
+}
+
+class LoginResult
+{
+    const OK = 0;
+    const LEVEL_LOW = 1;
+    const NOT_LOGGED = 2;
+    const INVALID_TOKEN = 3;
+}
+
+function require_login($min_level) {
+    if(!isset($_COOKIE['token'])) {
+        return LoginResult::NOT_LOGGED;
+    }
+    else {
+        $result = get_token_info($_COOKIE['token']);
+        if (isset($result['auth_level'])) {
+            if ($result['auth_level'] < $min_level) {
+                return LoginResult::LEVEL_LOW;
+            }
+            elseif ($result['auth_level'] >= $min_level) {
+                return LoginResult::OK;
+            }
+            else {
+                return LoginResult::INVALID_TOKEN;
+            }
+        }
+        else {
+            return LoginResult::INVALID_TOKEN;
+        }
+    }
+}
+
+function get_token_info($token) {
+    $db = get_db();
+    $sql = 'SELECT *
+            FROM tokens
+            JOIN users u on tokens.userid = u.userid
+            WHERE token = :token';
+    $connection = $db->prepare($sql);
+    $connection->execute(array(':token' => $token));
+    $result = $connection->fetch();
+    return $result;
+}
+
+function check_token($min_level) {
+    $login = require_login($min_level);
+    if ($login == LoginResult::INVALID_TOKEN or $login == LoginResult::NOT_LOGGED) {
+        header('Location: '. "/login.php");
+        echo "Invalid token";
+        die();
+    }
+    elseif ($login == LoginResult::LEVEL_LOW) {
+        http_response_code(403);
+        echo "Unauthorized";
+        die();
+    }
+}
 

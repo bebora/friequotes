@@ -39,8 +39,16 @@ body {
     background: linear-gradient(90deg, lightblue 0%, #22227d 24%, cornflowerblue 24%, cornflowerblue 76%, #22227d 76%, lightblue 100%);
     font-size: 20px;
 }
+.userphoto {
+    object-fit: cover;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    border: #888 solid 2px;
+    background-color: #fff;
+}
 
-.userinfo, .userphoto {
+.userinfo, .userphotocontainer {
     display:inline-block;
     width: 49%;
 }
@@ -59,9 +67,9 @@ body {
     body {
         width: 100%;
         background: cornflowerblue;
-        padding: 0px;
+        padding: 0;
     }
-    .userinfo, .userphoto {
+    .userinfo, .userphotocontainer {
         display:block;
         width: 100%;
     }
@@ -133,7 +141,6 @@ p, button, input {
 
 a {
     color:inherit;
-    color:inherit;
 }
 html, body {
     max-width: 100%;
@@ -189,3 +196,4 @@ html, body {
 .nounderline {
     text-decoration: none;
 }
+

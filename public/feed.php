@@ -1,7 +1,7 @@
 <?php
 
 require "../common.php";
-
+check_token(LoginLevel::GUEST);
 if (!isset($_GET['start'])) {
     $start = 0;
 }
@@ -10,7 +10,7 @@ else {
 }
 
 try  {
-    $connection = getdb();
+    $connection = get_db();
     $stmt = $connection->prepare('SELECT *
                                             FROM posts
                                             ORDER BY id DESC 

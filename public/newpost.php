@@ -7,12 +7,12 @@
  */
 
 require "../common.php";
-
+check_token(LoginLevel::USER);
 if (isset($_POST['submit'])) {
     if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
     try  {
-        $connection = getdb();
+        $connection = get_db();
         $new_post = array(
             "title" => $_POST['title'],
             "description" => $_POST['description'],
