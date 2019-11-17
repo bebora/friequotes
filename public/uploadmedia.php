@@ -199,7 +199,7 @@ if ($uploadOk == 0) {
     }
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $pathname)) {
         echo "The file " . escape(basename( $_FILES["fileToUpload"]["name"])) . " has been uploaded.";
-        createThumbnail($pathname, $pathname . 'thumb' . $imageFileType, 200);
+        createThumbnail($pathname, $pathname . '.thumb.' . $imageFileType, 200);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }

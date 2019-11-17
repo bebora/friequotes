@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                     $insert_token = $db->prepare($sql);
                     $insert_token->execute($new_token);
-                    setcookie("token", $token);
+                    setcookie("token", $token, time() + (2 * 365 * 24 * 60 * 60));
                     header("Location: /index.php");
                     echo "Logged successfully";
                     die();

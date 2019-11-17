@@ -197,3 +197,26 @@ html, body {
     text-decoration: none;
 }
 
+.userthumb {
+    object-fit: cover;
+    border-radius: 50%;
+    max-width: 200px;
+    border: #888 solid 2px;
+    background-color: #fff;
+}
+
+.userbox {
+    margin-bottom: 10px;
+    display: flex;
+    align-items:center;
+}
+.userboxcontainer {
+    display: flex;
+    align-items:center;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap:10px;
+}

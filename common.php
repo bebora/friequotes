@@ -73,12 +73,35 @@ function renderpost($post) {
     ';
 }
 
+function renderuser($user) {
+    $imageFileType = strtolower(pathinfo($user["propicpath"],PATHINFO_EXTENSION));
+    return '
+    <a href="userinfo.php?id=' . escape($user["id"]) . '" class="userboxcontainer">
+        <div class="userbox">
+            <img class="userthumb" src="uploads/'. escape($user["propicpath"]). '.thumb.'. $imageFileType . '" alt="Foto profilo non trovata">
+            <span>'
+        . escape($user["name"]) . '
+        </span>
+        </div>
+        
+    </a>';
+}
+
 function renderposts($result, $pagelimit) {
     $strbuilder = '';
     for ($i=0; $i<$pagelimit; $i++) {
         $strbuilder .= renderpost($result[$i]);
     }
+    echo $strbuilder;
     return $strbuilder;
+}
+
+function renderusers($result, $pagelimit) {
+    $strbuilder = '';
+    for ($i=0; $i<$pagelimit; $i++) {
+        $strbuilder .= renderuser($result[$i]);
+    }
+    return '<div class="wrapper">' .$strbuilder . '</div>';
 }
 
 class LoginLevel

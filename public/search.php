@@ -87,26 +87,9 @@ include 'templates/header.php';
 if (isset($_GET['query'])) {
     if ($result && count($result) > 0) { ?>
         <h2>Risultati</h2>
-        <?php if($mode == 0) { ?>
-            <table>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Compleanno</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($result as $row) : ?>
-                    <tr>
-                        <td><a href="userinfo.php?id=<?php echo escape($row["id"])?>"><?php echo escape($row["id"]); ?></a></td>
-                        <td><a href="userinfo.php?id=<?php echo escape($row["id"])?>"><?php echo escape($row["name"]); ?></a></td>
-                        <td><a href="userinfo.php?id=<?php echo escape($row["id"])?>"><?php echo escape($row["birthday"]); ?></a></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php }
+        <?php if($mode == 0) {
+            echo renderusers($result, count($result));
+        }
         else if($mode == 1) {?>
             <table>
                 <thead>
