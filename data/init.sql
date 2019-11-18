@@ -1,48 +1,48 @@
-CREATE TABLE IF NOT EXISTS entities (
+CREATE TABLE IF NOT EXISTS "entities" (
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	birthday TEXT,
 	propicpath TEXT
 );
-
-CREATE TABLE IF NOT EXISTS tags (
-	id INTEGER PRIMARY KEY,
-	name TEXT NOT NULL,
-	UNIQUE(name)
-);
-
-CREATE TABLE IF NOT EXISTS posts (
+CREATE TABLE IF NOT EXISTS "posts" (
 	id INTEGER PRIMARY KEY,
 	title TEXT NOT NULL,
 	description TEXT,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	lastedit TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS postusertags (
-	postid INTEGER,
-	entityid INTEGER
+CREATE TABLE IF NOT EXISTS "tags" (
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL,
+	UNIQUE(name)
 );
-
-CREATE TABLE IF NOT EXISTS posthashtags (
-	postid INTEGER,
-	tagid INTEGER
+CREATE TABLE IF NOT EXISTS "users" (
+	"username"	TEXT NOT NULL,
+	"userid"	INTEGER,
+	"auth_level"	INTEGER NOT NULL,
+	"password"	TEXT NOT NULL DEFAULT "changeme",
+	PRIMARY KEY("userid")
 );
-
-CREATE TABLE IF NOT EXISTS entitiesmedia (
-	entityid INTEGER,
-	mediapath TEXT,
-	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+CREATE TABLE IF NOT EXISTS "entitiesmedia" (
+	"entityid"	INTEGER,
+	"mediapath"	TEXT,
+	"created"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY("entityid") REFERENCES "entities"("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS users (
-    username TEXT not NULL,
-    userid INTEGER primary key,
-    auth_level INTEGER NOT NULL,
-    password TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS "posthashtags" (
+	"postid"	INTEGER,
+	"tagid"	INTEGER,
+	FOREIGN KEY("postid") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS tokens (
-    userid INTEGER,
-    token TEXT unique
+CREATE TABLE IF NOT EXISTS "postusertags" (
+	"postid"	INTEGER,
+	"entityid"	INTEGER,
+	FOREIGN KEY("entityid") REFERENCES "entities"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY("postid") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "tokens" (
+	"userid"	INTEGER NOT NULL,
+	"token"	TEXT NOT NULL UNIQUE,
+	"created"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY("userid") REFERENCES "users"("userid") ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -41,8 +41,8 @@ if (isset($_POST['submit'])) {
 
         $taggedentities = array();
         $taggedtags = array();
-
         foreach (explode(',', $_POST['users']) as $temp) {
+            if ($temp == "") continue;
             $stmt = $connection->prepare('SELECT * FROM entities WHERE name like :name');
             $name = '%'.trim($temp).'%';
             $stmt->bindParam(':name', $name);
@@ -60,6 +60,7 @@ if (isset($_POST['submit'])) {
         }
         //Get all input values separated by commas as an array
         foreach (explode(',', $_POST['tags']) as $temp) {
+            if ($temp == "") continue;
             $name = ucfirst(strtolower(preg_replace('/\s*(#)*([^\s]*)\s*/', '$2', $temp)));  //Remove hash symbol and whitespaces, then capitalize first letter
             $stmt = $connection->prepare('INSERT OR IGNORE INTO tags(name) VALUES(:name)');
             $stmt->bindParam(':name', $name);
@@ -87,16 +88,15 @@ if (isset($_POST['submit'])) {
 $pageTitle = "Nuovo post";
 require "templates/header.php";?>
 
-<?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote>"<?php echo escape($_POST['title']); ?>" aggiunta con successo.</blockquote>
-<?php endif; ?>
+<?php if (isset($_POST['submit']) && $statement) :
+    echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiunta con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
+endif; ?>
 
 <?php if (isset($_POST['submit']) && !$statement) : ?>
     <blockquote>"<?php echo escape($_POST['title']); ?>" non aggiunta.</blockquote>
 <?php endif; ?>
 
 <h2>Aggiungi una storia epica</h2>
-
 <form method="post">
     <input id="csrftoken" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <label for="title">Titolo</label>

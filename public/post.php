@@ -2,6 +2,7 @@
 
 require "../common.php";
 check_token(LoginLevel::GUEST);
+$can_delete = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
 if (isset($_GET['id'])) {
     try  {
         $connection = get_db();
@@ -20,6 +21,22 @@ if (isset($_GET['id'])) {
         $resultusers = $statement->fetchAll();
     } catch(PDOException $error) {
         echo $error->getMessage();
+    }
+}
+if (isset($_POST['submit'])) {
+    if ($can_delete) {
+        header("Location: /index.php");
+        try  {
+            $connection = get_db();
+            $connection->exec( 'PRAGMA foreign_keys = ON;' );
+            $stmt = $connection->prepare('DELETE FROM posts WHERE id = :id');
+            $id = $_GET['id'];
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+        } catch(PDOException $error) {
+            echo $error->getMessage();
+        }
+        die();
     }
 }
 ?>
@@ -47,5 +64,12 @@ include 'templates/header.php';
             <button type="submit" id="upload-button">Carica</button><br><br>
         </div>
     </form>
+    <?php if ($can_delete) {
+        ?>
+            <form id="delete-form" method="POST" onsubmit="return confirm('Vuoi davvero cancellare il post?');">
+                <button type="submit" id="delete-button" name="submit">Cancella post ❌</button>
+            </form>
+        <?php
+    }?>
     <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
 <?php require "templates/footer.php"; ?>
