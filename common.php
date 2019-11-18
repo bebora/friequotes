@@ -91,7 +91,6 @@ function renderposts($result, $pagelimit) {
     for ($i=0; $i<$pagelimit; $i++) {
         $strbuilder .= renderpost($result[$i]);
     }
-    echo $strbuilder;
     return $strbuilder;
 }
 
