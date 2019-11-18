@@ -11,6 +11,11 @@ if (isset($_GET['id'])) {
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $result = $stmt->fetch();
+        if ($result == null) {
+            header("Location: /index.php");
+            echo "Non esiste alcun post con questo id";
+            die();
+        }
         $sql = "SELECT *
                 FROM entities
                 JOIN postusertags on entities.id = postusertags.entityid

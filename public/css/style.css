@@ -57,10 +57,19 @@ body {
     align-items: center;
 }
 
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap:10px;
+}
+
 @media only screen and (max-width: 1100px) {
     body {
         width: 70%;
         background: linear-gradient(90deg, lightblue 0%, #22227d 14%, cornflowerblue 14%, cornflowerblue 86%, #22227d 86%, lightblue 100%);
+    }
+    .wrapper {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 @media only screen and (max-width: 800px) {
@@ -76,6 +85,9 @@ body {
     .infoandphoto {
         display: block;
         align-items: center;
+    }
+    .wrapper {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 
@@ -213,12 +225,6 @@ html, body {
 .userboxcontainer {
     display: flex;
     align-items:center;
-}
-
-.wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap:10px;
 }
 
 textarea {
