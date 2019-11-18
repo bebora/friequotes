@@ -169,3 +169,28 @@ function check_token($min_level) {
     }
 }
 
+function set_login_cookie($userid) {
+    $db = get_db();
+    $check_existing_token = $db->prepare("SELECT *
+                                                    FROM tokens
+                                                    WHERE token = :token");
+    do {
+        $token = gen_random_bytes();
+        $check_existing_token->execute(array(":token" => $token));
+        $exist = $check_existing_token->fetchAll();
+    } while (count($exist) > 0);
+    $new_token = array(
+        "userid" => $userid,
+        "token" => $token,
+        "created" => date("c")
+    );
+    $sql = sprintf(
+        "INSERT INTO %s (%s) values (%s)",
+        "tokens",
+        implode(", ", array_keys($new_token)),
+        ":" . implode(", :", array_keys($new_token))
+    );
+    $insert_token = $db->prepare($sql);
+    $insert_token->execute($new_token);
+    setcookie("token", $token, time() + (2 * 365 * 24 * 60 * 60));
+}

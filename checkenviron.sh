@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 modules=( gd pdo_sqlite exif)
 for i in "${modules[@]}"
 do

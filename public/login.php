@@ -21,28 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             else {
                 $match = password_verify($_POST['password'], $result[0]['password']);
                 if ($match) {
-                    $check_existing_token = $db->prepare("SELECT *
-                                                                    FROM tokens
-                                                                    WHERE token = :token");
-                    do {
-                        $token = gen_random_bytes();
-                        $check_existing_token->execute(array(":token" => $token));
-                        $exist = $check_existing_token->fetchAll();
-                    } while (count($exist) > 0);
-                    $new_token = array(
-                        "userid" => $result[0]['userid'],
-                        "token" => $token,
-                        "created" => date("c")
-                    );
-                    $sql = sprintf(
-                        "INSERT INTO %s (%s) values (%s)",
-                        "tokens",
-                        implode(", ", array_keys($new_token)),
-                        ":" . implode(", :", array_keys($new_token))
-                    );
-                    $insert_token = $db->prepare($sql);
-                    $insert_token->execute($new_token);
-                    setcookie("token", $token, time() + (2 * 365 * 24 * 60 * 60));
+                    set_login_cookie($result[0]['userid']);
                     header("Location: /index.php");
                     echo "Logged successfully";
                     die();
