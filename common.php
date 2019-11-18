@@ -74,11 +74,10 @@ function renderpost($post) {
 }
 
 function renderuser($user) {
-    $imageFileType = strtolower(pathinfo($user["propicpath"],PATHINFO_EXTENSION));
     return '
     <a href="userinfo.php?id=' . escape($user["id"]) . '" class="userboxcontainer">
         <div class="userbox">
-            <img class="userthumb" src="uploads/'. escape($user["propicpath"]). '.thumb.'. $imageFileType . '" alt="Foto profilo non trovata">
+            <img class="userthumb" src="uploads/thumbs/'. escape($user["propicpath"]) . '" alt="Foto profilo non trovata">
             <span>'
         . escape($user["name"]) . '
         </span>

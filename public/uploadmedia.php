@@ -167,10 +167,14 @@ if ($uploadOk == 0) {
     echo "Sorry, your file was not uploaded.";
 // if everything is ok, try to upload file
 } else {
+    $typefolder = array(
+        'userpropic' => 'propics/',
+        'usermedia' => 'userpics/'
+    );
     $finalName = $target_file . time() . '.' .$imageFileType;
-    $pathname = SITE_ROOT . $target_dir . $finalName;
     if (isset($_POST['type'])) {
         if ($_POST['type'] == 'userpropic' && isset($_POST['id'])) {
+            $pathname = SITE_ROOT . $target_dir . $typefolder[$_POST['type']] .$finalName;
             $connection = get_db();
             $sql = "UPDATE entities 
                     SET propicpath = :path
@@ -181,6 +185,7 @@ if ($uploadOk == 0) {
             $statement->execute();
         }
         if ($_POST['type'] == 'usermedia' && isset($_POST['id'])) {
+            $pathname = SITE_ROOT . $target_dir . $typefolder[$_POST['type']] .$finalName;
             $connection = get_db();
             $new_media = array(
                 "entityid" => $_POST['id'],
@@ -199,7 +204,7 @@ if ($uploadOk == 0) {
     }
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $pathname)) {
         echo "The file " . escape(basename( $_FILES["fileToUpload"]["name"])) . " has been uploaded.";
-        createThumbnail($pathname, $pathname . '.thumb.' . $imageFileType, 200);
+        createThumbnail($pathname, SITE_ROOT . '/uploads/thumbs/' . $finalName , 200);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }

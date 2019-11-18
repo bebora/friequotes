@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
         $stmt->execute();
         $result = $stmt->fetch();
         $name = $result['name'];
-        $picpath = 'uploads/' .$result['propicpath'];
+        $picpath = 'uploads/propics/' .$result['propicpath'];
         $resultinfo = '<div class="userphotocontainer">
                             <a href="' . $picpath . '" target="_blank">
                               <img class="userphoto" src="' . $picpath . '" alt="' . 'Foto profilo non esistente">
