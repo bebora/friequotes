@@ -49,7 +49,20 @@ include 'templates/header.php';
         <?php echo $resultinfo ?>
     </div>
     <a href="usermedia.php?id=<?php echo $_GET['id'] ?>" style="padding-left: 5px">Altre foto di <?php echo escape($name) ?></a>
-    <h3>Post in cui <?php echo escape($name) ?> è taggato</h3>
+    <div style="display: flex; justify-content: space-between">
+        <h3 style="display: inline-block">Post in cui <?php echo escape($name) ?> è taggato</h3>
+        <span style="float: right; margin-top: 10px">
+            Ordina per
+            <label for="sort" style="display: none">Ordina per</label>
+            <select id="sort" onchange="reloadUrl(this)">
+                <option value="newer" selected>Postati più di recente</option>
+                <option value="older">Postati meno di recente</option>
+                <option value="title">Titolo crescente</option>
+                <option value="titledesc">Titolo decrescente</option>
+            </select>
+        </span>
+    </div>
+
     <div class="postlist">
         <?php echo renderposts($resultposts, count($resultposts))?>
     </div>
@@ -63,4 +76,11 @@ include 'templates/header.php';
         </div>
     </form>
     <script defer src="data:text/javascript, uploadmedia('userpropic'); "></script>
+    <script>
+        function reloadUrl(e) {
+            let url = new URL(window.location.href);
+            url.searchParams.set('sortby', e.options[e.selectedIndex].value);
+            console.log(url)
+        }
+    </script>
 <?php require "templates/footer.php"; ?>
