@@ -143,9 +143,9 @@ function require_login($min_level) {
 
 function get_token_info($token) {
     $db = get_db();
-    $sql = 'SELECT *
-            FROM tokens
-            JOIN users u on tokens.userid = u.userid
+    $sql = 'SELECT t.created, t.token, t.userid, u.auth_level, u.username
+            FROM tokens t
+            JOIN users u on t.userid = u.userid
             WHERE token = :token';
     $connection = $db->prepare($sql);
     $connection->execute(array(':token' => $token));

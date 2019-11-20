@@ -17,7 +17,6 @@ var uploadmedia = function(type) {
         formData.append('csrf', csrftoken);
         let urlParams = new URLSearchParams(window.location.search);
         formData.append('id', urlParams.get('id'));
-        console.log(...formData);
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'uploadmedia.php', true);
         xhr.upload.onprogress = function (e) {

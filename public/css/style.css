@@ -231,3 +231,27 @@ textarea {
     font-size: 20px;
     font-family: sans-serif;
 }
+
+.tokendash {
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+    border-collapse: collapse;
+}
+.tokendash td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid black;
+    background-color: lightcyan;
+}
+.tokendash th {
+    border: 1px solid black;
+    background-color: limegreen;
+}
+.column {
+    width: 25%;
+}
+.shortcolumn {
+    width: 15%;
+}
