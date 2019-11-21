@@ -150,3 +150,9 @@ function set_login_cookie($userid) {
     $insert_token->execute($new_token);
     setcookie("token", $token, time() + (2 * 365 * 24 * 60 * 60));
 }
+
+function get_config() {
+    $jsonStr = file_get_contents("../default-config.json");
+    $config = json_decode($jsonStr);
+    return $config;
+}

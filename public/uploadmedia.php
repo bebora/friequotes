@@ -1,7 +1,7 @@
 
 <?php
 
-require "../common.php";
+require '../common.php';
 define ('SITE_ROOT', realpath(getcwd()));
 check_token(LoginLevel::USER);
 

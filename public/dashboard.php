@@ -1,48 +1,7 @@
 <?php
 
-function render_token($token) {
-    $grantlevel_to_string = array('Guest', 'Utente', 'Moderatore', 'Admin');
-    $sql = 'SELECT * FROM users WHERE userid = :userid';
-    $db = get_db();
-    $stm = $db->prepare($sql);
-    $stm->execute(array(':userid' => $token['author']));
-    $author_info = $stm->fetch();
-    return sprintf('
-        <tr>
-            <td title="Copia link d\'invito 📋" style="cursor: copy;" onclick="copyToClipboard(this)">%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td style="text-align: center; cursor: pointer;" onclick="revokeInvite(this)">%s</td>
-        </tr>
-        ', $token['token'],
-        $grantlevel_to_string[$token['grantlevel']],
-        $author_info['username'],
-        $token['created'],
-        '❌'
-        );
-}
-
-function render_tokens($tokens, $limit) {
-    $temp = '<table class="tokendash">
-                <thead>
-                    <tr>
-                        <th class="column">Token</th>
-                        <th class="shortcolumn">Livello</th>
-                        <th class="column">Creato da</th>
-                        <th class="shortcolumn">Creato il</th>
-                        <th>Revoca</th>
-                    </tr>
-                 </thead><tbody>';
-
-    for ($i=0; $i<$limit; $i++) {
-        $temp .= render_token($tokens[$i]);
-    }
-    $temp .= '</tbody></table>';
-    return $temp;
-}
-
-require "../common.php";
+require '../common.php';
+require "../render.php";
 check_token(LoginLevel::ADMIN);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

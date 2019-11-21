@@ -1,7 +1,8 @@
 <?php
 
-require "../common.php";
+require '../common.php';
 require "../render.php";
+$config = get_config();
 check_token(LoginLevel::GUEST);
 if (!isset($_GET['start'])) {
     $start = 0;
@@ -31,7 +32,7 @@ try  {
 $pageTitle = "Feed - Pagina " . (intval($start/10)+1);
 include 'templates/header.php';
 ?>
-    <h2>Feed Friequotes</h2>
+    <h2>Feed <?php echo $config->sitename?></h2>
     <div class="postlist">
         <?php echo render_posts($result, $pagelimit); ?>
     </div>
@@ -44,4 +45,4 @@ include 'templates/header.php';
     <?php }?>
     </div>
 
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

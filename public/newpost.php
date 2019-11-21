@@ -6,7 +6,7 @@
  *
  */
 
-require "../common.php";
+require '../common.php';
 check_token(LoginLevel::USER);
 if (isset($_POST['submit'])) {
     if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
@@ -113,4 +113,4 @@ endif; ?>
 
 <a href="index.php">Homepage</a>
 
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

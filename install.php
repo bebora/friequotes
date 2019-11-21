@@ -7,7 +7,7 @@ try {
     $connection = get_db();
     $sql = file_get_contents('data/init.sql');
     $connection->exec($sql);
-    echo 'Database and table users created successfully.';
+    echo "Database and table users created successfully\n";
 } catch(PDOException $error) {
     echo $error->getMessage();
 }
@@ -24,7 +24,14 @@ $folders = array(
 foreach ($folders as $key => $value) {
     if (!file_exists($value)) {
         mkdir($value, 0777, true);
-        echo 'Adding ' . $key . ' folder';
+        echo 'Adding ' . $key . " folder\n";
     }
 }
 
+/**
+ * Add default config file
+ */
+if (!file_exists('config.json')) {
+    copy('default-config.json', 'config.json');
+    echo "Setting config.json to default values\n";
+}

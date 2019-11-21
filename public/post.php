@@ -1,6 +1,6 @@
 <?php
 
-require "../common.php";
+require '../common.php';
 require "../render.php";
 check_token(LoginLevel::GUEST);
 $can_delete = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
@@ -30,7 +30,7 @@ if (isset($_GET['id'])) {
         $sql = "SELECT  mediapath 
             FROM postsmedia
             WHERE postid = :id
-            ORDER BY created ASC";
+            ORDER BY created";
         $statement = $connection->prepare($sql);
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
         $statement->execute();
@@ -92,4 +92,4 @@ include 'templates/header.php';
         <?php
     }?>
     <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

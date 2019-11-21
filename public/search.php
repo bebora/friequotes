@@ -5,7 +5,7 @@
  * a parameter: in this case, location.
  *
  */
-require "../common.php";
+require '../common.php';
 require "../render.php";
 check_token(LoginLevel::GUEST);
 
@@ -71,7 +71,8 @@ if (isset($_GET['query'])) {
 }
 ?>
 <?php
-$pageTitle = 'Ricerca Friequotes';
+$config = get_config();
+$pageTitle = 'Ricerca ' . $config->sitename;
 include 'templates/header.php';
 ?>
     <h2>Trova utenti, post o collezioni di post</h2>
@@ -89,7 +90,7 @@ if (isset($_GET['query'])) {
     if ($result && count($result) > 0) { ?>
         <h2>Risultati</h2>
         <?php if($mode == 0) {
-            echo render_users($result, count($result));
+            echo render_users_searchpage($result, count($result));
         }
         else if($mode == 1) {?>
             <table>
@@ -130,4 +131,4 @@ if (isset($_GET['query'])) {
     <?php }
 } ?>
 
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

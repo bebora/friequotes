@@ -1,6 +1,6 @@
 <?php
 
-require "../common.php";
+require '../common.php';
 check_token(LoginLevel::MODERATOR);
 if (isset($_POST['submit'])) {
   if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
@@ -45,4 +45,4 @@ include 'templates/header.php';
 
   <a href="index.php">Back to home</a>
 
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

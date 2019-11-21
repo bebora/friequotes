@@ -1,6 +1,6 @@
 <?php
 
-require "../common.php";
+require '../common.php';
 check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
     try  {
@@ -31,4 +31,4 @@ include 'templates/header.php';
     <h2>Post taggati con #<?php echo escape($tagname) ?></h2>
     <?php echo render_posts($result, count($result))?>
 
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

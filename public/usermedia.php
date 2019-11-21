@@ -1,6 +1,6 @@
 <?php
 
-require "../common.php";
+require '../common.php';
 require "../render.php";
 check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
         $sql = "SELECT  mediapath 
                 FROM entitiesmedia
                 WHERE entityid = :id
-                ORDER BY created ASC";
+                ORDER BY created";
         $statement = $connection->prepare($sql);
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
         $statement->execute();
@@ -44,4 +44,4 @@ include 'templates/header.php';
         </div>
     </form>
     <script defer src="data:text/javascript, uploadmedia('usermedia'); "></script>
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php'; ?>

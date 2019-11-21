@@ -1,3 +1,7 @@
+<?php
+require_once '../common.php';
+$config = get_config();
+?>
 <!doctype html>
 <html lang="en">
 
@@ -12,4 +16,4 @@
 </head>
 
 <body>
-	<h1><a href="index.php">Friequotes 📜</a></h1>
+	<h1><a href="index.php"><?php echo $config->sitename?> 📜</a></h1>

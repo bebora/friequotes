@@ -1,7 +1,8 @@
 <?php
-require "../common.php";
+require '../common.php';
 $is_admin = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
-$pageTitle = 'Friequotes Home';
+$config = get_config();
+$pageTitle = $config->sitename . ' Home';
 include 'templates/header.php';
 ?>
 
@@ -20,4 +21,4 @@ include 'templates/header.php';
 <br>
 <br>
 
-<?php include "templates/footer.php"; ?>
+<?php include 'templates/footer.php'; ?>
