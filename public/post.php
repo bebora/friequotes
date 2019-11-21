@@ -1,6 +1,7 @@
 <?php
 
 require "../common.php";
+require "../render.php";
 check_token(LoginLevel::GUEST);
 $can_delete = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
 if (isset($_GET['id'])) {
@@ -24,6 +25,16 @@ if (isset($_GET['id'])) {
         $statement->bindParam(':postid', $id, PDO::PARAM_INT);
         $statement->execute();
         $resultusers = $statement->fetchAll();
+
+        //Then get media for this post
+        $sql = "SELECT  mediapath 
+            FROM postsmedia
+            WHERE postid = :id
+            ORDER BY created ASC";
+        $statement = $connection->prepare($sql);
+        $statement->bindParam(':id', $id, PDO::PARAM_STR);
+        $statement->execute();
+        $resultmedia = $statement->fetchAll();
     } catch(PDOException $error) {
         echo $error->getMessage();
     }
@@ -48,9 +59,10 @@ if (isset($_POST['submit'])) {
 <?php
 $pageTitle = $result["title"];
 $scripts = '<script src="scripts/upload.js" defer></script>';
+$extrastyle = '<link rel="stylesheet" href="css/usermedia.css">';
 include 'templates/header.php';
 ?>
-    <?php echo renderpost($result)?>
+    <?php echo render_post($result)?>
     <?php
         if (count($resultusers) > 0) {
             echo "<p>Utenti taggati:";
@@ -58,6 +70,9 @@ include 'templates/header.php';
                 echo '<span class="usertag"><a href="userinfo.php?id=' . $row['entityid'] . '">' . escape($row['name']) . '</a></span>';
             endforeach;
             echo '</p>';
+        }
+        if (count($resultmedia) > 0) {
+            echo render_medias($resultmedia, count($resultmedia), '/uploads/postmedia/');
         }
     ?>
     <form enctype="multipart/form-data" id="file-form" method="POST">

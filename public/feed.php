@@ -1,6 +1,7 @@
 <?php
 
 require "../common.php";
+require "../render.php";
 check_token(LoginLevel::GUEST);
 if (!isset($_GET['start'])) {
     $start = 0;
@@ -32,7 +33,7 @@ include 'templates/header.php';
 ?>
     <h2>Feed Friequotes</h2>
     <div class="postlist">
-        <?php echo renderposts($result, $pagelimit); ?>
+        <?php echo render_posts($result, $pagelimit); ?>
     </div>
     <div class="arrows">
     <?php if ($start>0) {?>

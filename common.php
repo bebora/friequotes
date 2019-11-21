@@ -59,48 +59,6 @@ function get_relevant_date_diff($date) {
     }
 }
 
-function renderpost($post) {
-    return '
-    <a href="post.php?id=' . escape($post["id"]) . '" class="nounderline">
-        <div class="postbox">
-            <div class="posttitle" style="position: relative;">
-                <span class="titlecard1">' . escape($post["title"]) . '</span>
-                <span class="timetitlecard">' . get_relevant_date_diff($post["created"]) . ' fa</span>
-            </div>
-            <p class="postdesc">' . escape($post["description"]) . '</p>
-        </div>
-    </a>
-    ';
-}
-
-function renderuser($user) {
-    return '
-    <a href="userinfo.php?id=' . escape($user["id"]) . '" class="userboxcontainer">
-        <div class="userbox">
-            <img class="userthumb" src="uploads/thumbs/'. escape($user["propicpath"]) . '" alt="Foto profilo non trovata">
-            <span>'
-        . escape($user["name"]) . '
-        </span>
-        </div>
-        
-    </a>';
-}
-
-function renderposts($result, $pagelimit) {
-    $strbuilder = '';
-    for ($i=0; $i<$pagelimit; $i++) {
-        $strbuilder .= renderpost($result[$i]);
-    }
-    return $strbuilder;
-}
-
-function renderusers($result, $pagelimit) {
-    $strbuilder = '';
-    for ($i=0; $i<$pagelimit; $i++) {
-        $strbuilder .= renderuser($result[$i]);
-    }
-    return '<div class="wrapper">' .$strbuilder . '</div>';
-}
 
 class LoginLevel
 {

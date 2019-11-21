@@ -6,6 +6,7 @@
  *
  */
 require "../common.php";
+require "../render.php";
 check_token(LoginLevel::GUEST);
 
 
@@ -88,7 +89,7 @@ if (isset($_GET['query'])) {
     if ($result && count($result) > 0) { ?>
         <h2>Risultati</h2>
         <?php if($mode == 0) {
-            echo renderusers($result, count($result));
+            echo render_users($result, count($result));
         }
         else if($mode == 1) {?>
             <table>
@@ -109,7 +110,7 @@ if (isset($_GET['query'])) {
             </table>
         <?php }
         else if($mode == 2) {
-            echo renderposts($result, count($result));
+            echo render_posts($result, count($result));
         }?>
     <?php } else { ?>
         <blockquote>Nessun risultato per <?php echo escape($_GET['query']); ?>.</blockquote>

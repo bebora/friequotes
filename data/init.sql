@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"username"	TEXT NOT NULL UNIQUE,
 	"userid"	INTEGER,
 	"auth_level"	INTEGER NOT NULL,
-	"password"	TEXT NOT NULL DEFAULT "changeme",
+	"password"	TEXT NOT NULL DEFAULT 'changeme',
 	PRIMARY KEY("userid")
 );
 CREATE TABLE IF NOT EXISTS "entitiesmedia" (
@@ -52,3 +52,10 @@ CREATE TABLE IF NOT EXISTS "invitetokens" (
 	"created"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"author" INTEGER
 );
+CREATE TABLE IF NOT EXISTS "postsmedia" (
+    "postid" INTEGER NOT NULL,
+    "mediapath"	TEXT,
+    "created"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY("postid") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+

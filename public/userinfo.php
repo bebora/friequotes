@@ -1,6 +1,7 @@
 <?php
 
 require "../common.php";
+require "../render.php";
 check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
     try  {
@@ -11,7 +12,7 @@ if (isset($_GET['id'])) {
         $stmt->execute();
         $result = $stmt->fetch();
         $name = $result['name'];
-        $picpath = 'uploads/propics/' .$result['propicpath'];
+        $picpath = 'uploads/profilepics/' .$result['propicpath'];
         $resultinfo = '<div class="userphotocontainer">
                             <a href="' . $picpath . '" target="_blank">
                               <img class="userphoto" src="' . $picpath . '" alt="' . 'Foto profilo non esistente">
@@ -41,7 +42,7 @@ if (isset($_GET['id'])) {
             $sql .= ' ORDER BY ' . $column[$_GET['sortby']] . ' COLLATE NOCASE ' .$order[$_GET['sortby']];
         }
         else {
-            $sql .= " ORDER BY created COLLATE NOCASE DESC";
+            $sql .= ' ORDER BY created COLLATE NOCASE DESC';
         }
         $statement = $connection->prepare($sql);
         $statement->bindParam(':id', $id, PDO::PARAM_INT);
@@ -57,7 +58,7 @@ else {
 }
 ?>
 <?php
-$pageTitle = escape($name) . " - Profilo";
+$pageTitle = escape($name) . ' - Profilo';
 $scripts = '<script src="scripts/upload.js" defer></script>';
 include 'templates/header.php';
 ?>
@@ -65,7 +66,7 @@ include 'templates/header.php';
     <div class="infoandphoto">
         <?php echo $resultinfo ?>
     </div>
-    <a href="usermedia.php?id=<?php echo $_GET['id'] ?>" style="padding-left: 5px">Altre foto di <?php echo escape($name) ?></a>
+    <a href="usermedia.php?id=<?php echo $_GET['id'] ?>" style="padding-left: 5px"><span style="font-size: 28px">🖼</span>️ Altre foto di <?php echo escape($name) ?></a>
     <div style="display: flex; justify-content: space-between">
         <h3 style="display: inline-block">Post in cui <?php echo escape($name) ?> è taggato</h3>
         <span style="float: right; margin-top: 10px">
@@ -81,7 +82,7 @@ include 'templates/header.php';
     </div>
 
     <div class="postlist">
-        <?php echo renderposts($resultposts, count($resultposts))?>
+        <?php echo render_posts($resultposts, count($resultposts))?>
     </div>
     <form enctype="multipart/form-data" id="file-form" method="POST">
         <div>
@@ -111,4 +112,4 @@ include 'templates/header.php';
         }
         sort.selectedIndex = selectedindex;
     </script>
-<?php require "templates/footer.php"; ?>
+<?php require 'templates/footer.php';?>

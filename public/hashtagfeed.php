@@ -29,6 +29,6 @@ $pageTitle = '#' . $tagname;
 include 'templates/header.php';
 ?>
     <h2>Post taggati con #<?php echo escape($tagname) ?></h2>
-    <?php echo renderposts($result, count($result))?>
+    <?php echo render_posts($result, count($result))?>
 
 <?php require "templates/footer.php"; ?>

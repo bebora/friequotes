@@ -16,9 +16,10 @@ try {
  * Create upload folders
  */
 $folders = array(
-    'userpics' => 'public/uploads/userpics',
-    'propics' => 'public/uploads/propics',
-    'thumbnails' => 'public/uploads/thumbs'
+    'usermedia' => 'public/uploads/usermedia',
+    'profilepics' => 'public/uploads/profilepics',
+    'thumbnails' => 'public/uploads/thumbs',
+    'postmedia' => 'public/uploads/postmedia'
 );
 foreach ($folders as $key => $value) {
     if (!file_exists($value)) {

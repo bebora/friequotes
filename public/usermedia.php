@@ -1,6 +1,7 @@
 <?php
 
 require "../common.php";
+require "../render.php";
 check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
     try  {
@@ -32,9 +33,7 @@ $extrastyle = '<link rel="stylesheet" href="css/usermedia.css">';
 include 'templates/header.php';
 ?>
     <h2>Foto di <a href="userinfo.php?id=<?php echo $_GET['id']?>"><?php echo escape($name) ?></a></h2>
-        <?php foreach ($resultmedia as $row) :
-            echo '<img src="' . $row["mediapath"] . '" alt="' . basename($row["mediapath"]) . '">';
-        endforeach; ?>
+        <?php echo render_medias($resultmedia, count($resultmedia), '/uploads/usermedia/')?>
     <form action="" enctype="multipart/form-data" id="file-form" method="POST">
         <div id="upup">
             <h4>Carica un'altra foto</h4>

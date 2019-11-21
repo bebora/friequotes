@@ -168,11 +168,13 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     $typefolder = array(
-        'userpropic' => 'propics/',
-        'usermedia' => 'userpics/'
+        'userpropic' => 'profilepics/',
+        'usermedia' => 'usermedia/',
+        'postmedia' => 'postmedia/'
     );
     $finalName = $target_file . time() . '.' .$imageFileType;
     if (isset($_POST['type'])) {
+        check_token(LoginLevel::MODERATOR);
         if ($_POST['type'] == 'userpropic' && isset($_POST['id'])) {
             $pathname = SITE_ROOT . $target_dir . $typefolder[$_POST['type']] .$finalName;
             $connection = get_db();
@@ -195,6 +197,23 @@ if ($uploadOk == 0) {
             $sql = sprintf(
                 "INSERT INTO %s (%s) values (%s)",
                 "entitiesmedia",
+                implode(", ", array_keys($new_media)),
+                ":" . implode(", :", array_keys($new_media))
+            );
+            $statement = $connection->prepare($sql);
+            $statement->execute($new_media);
+        }
+        if ($_POST['type'] == 'postmedia' && isset($_POST['id'])) {
+            $pathname = SITE_ROOT . $target_dir . $typefolder[$_POST['type']] .$finalName;
+            $connection = get_db();
+            $new_media = array(
+                "postid" => $_POST['id'],
+                "mediapath" => $finalName,
+                "created" => date("c")
+            );
+            $sql = sprintf(
+                "INSERT INTO %s (%s) values (%s)",
+                "postsmedia",
                 implode(", ", array_keys($new_media)),
                 ":" . implode(", :", array_keys($new_media))
             );
