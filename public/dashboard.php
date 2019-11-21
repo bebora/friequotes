@@ -9,6 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Token CSRF mancante";
         die();
     }
+    /**
+     * 3 different requests to handle with different params:
+     * -Change user permission level: userid, authlevel
+     * -Create invite token: grantlevel
+     * -Remove invite token: revoketoken
+     */
     $grant = $_POST['grantlevel'];
     if (isset($grant)) {
         if ($grant < 0)
@@ -49,6 +55,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stm = $db->prepare($sql);
         $stm->execute(array(":token" => $_POST['revoketoken']));
     }
+    elseif (isset($_POST['authlevel'])) {
+        $new_level = $_POST['authlevel'];
+        if ($new_level < 0)
+            $new_level = 0;
+        if ($new_level > 3)
+            $new_level = 3;
+        $db = get_db();
+        $update = array(
+            ":authlevel" => $_POST['authlevel'],
+            ":userid" => $_POST['userid']
+        );
+        $sql = 'UPDATE users
+                SET auth_level = :authlevel
+                WHERE userid = :userid';
+        $stm = $db->prepare($sql);
+        $stm->execute($update);
+    }
 }
 
 $pageTitle = 'Dashboard inviti';
@@ -68,7 +91,7 @@ include 'templates/header.php';?>
                 <option value='3'>Admin</option>
             </select>
             <input id="csrf" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']);?>">
-            <button type='submit' id='upload-button'>Crea</button
+            <button type='submit' id='upload-button'>Crea</button>
         </form>
     </div>
 </div>
@@ -81,6 +104,15 @@ $stm = $db->prepare($sql);
 $stm->execute();
 $result = $stm->fetchAll();
 echo render_tokens($result, count($result));?>
+<h3>Utenti presenti</h3>
+<?php
+$db = get_db();
+$sql = 'SELECT *
+        FROM users';
+$stm = $db->prepare($sql);
+$stm->execute();
+$result = $stm->fetchAll();
+echo render_users_dashboard($result, count($result));?>
 <script>
     function copyToClipboard(e) {
         let token = e.innerText;
@@ -89,7 +121,7 @@ echo render_tokens($result, count($result));?>
         inviteURL.searchParams.set('ref', token);
         console.log(inviteURL);
         let tempTextarea = document.createElement('textarea');
-        tempTextarea.value = inviteURL;
+        tempTextarea.value = inviteURL.toString();
         document.body.appendChild(tempTextarea);
         tempTextarea.focus();
         tempTextarea.select();
@@ -105,6 +137,10 @@ echo render_tokens($result, count($result));?>
         xhr.open('POST', 'dashboard.php', false);
         xhr.send(formData);
         location.reload();
+    }
+    function updateLevel(e) {
+        let form = document.getElementById(e.attributes['data-form'].value);
+        form.submit();
     }
 </script>
 <?php

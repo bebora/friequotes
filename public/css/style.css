@@ -238,14 +238,14 @@ textarea {
     white-space: nowrap;
     border-collapse: collapse;
 }
-.tokendash td {
+.tokendash td, .userdash td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     border: 1px solid black;
     background-color: lightcyan;
 }
-.tokendash th {
+.tokendash th, .userdash th {
     border: 1px solid black;
     background-color: limegreen;
 }
@@ -254,4 +254,11 @@ textarea {
 }
 .shortcolumn {
     width: 15%;
+}
+.userdash {
+    width: 100%;
+}
+.horizontal-centering td {
+    text-align: center;
+    vertical-align: middle;
 }

@@ -96,11 +96,48 @@ function render_tokens($tokens, $limit) {
     return $temp;
 }
 
-function render_user_dashboard() {
+function render_user_dashboard($user, $index) {
+    $grantlevel_to_string = array('Guest', 'Utente', 'Moderatore', 'Admin');
+    $select = sprintf('<select form="userform%d" name="authlevel">', $index);
+    for ($j = 0; $j < 4; $j++) {
+        $select .= '<option value="' . $j . ($j == $user['auth_level'] ? '" selected>' : '">') . $grantlevel_to_string[$j] . '</option>';
+    }
+    $select .= '</select>';
 
+    return sprintf('
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td style="cursor:pointer; text-align: center;" onclick="updateLevel(this)" data-form="userform%d">✅</td>
+        </tr>',
+        escape($user['username']),
+        $select,
+        $index
+    );
 }
 
-function render_users_dashboard() {
+function render_users_dashboard($items, $limit) {
+    $temp = '';
+    for ($i=0; $i<$limit; $i++) {
+        $temp .= '<form method="POST" id="userform' . $i . '">
+                        <input type="hidden" name="userid" value="' . $items[$i]['userid'] . '">
+                        <input id="csrf" name="csrf" type="hidden" value="' . escape($_SESSION['csrf']) . '">
+                  </form>';
+    }
+    $temp .= '<table class="userdash">
+                <thead>
+                    <tr>
+                        <th >Nome utente</th>
+                        <th >Livello</th>
+                        <th>Aggiorna</th>
+                    </tr>
+                 </thead><tbody class="horizontal-centering">';
+
+    for ($i=0; $i<$limit; $i++) {
+        $temp .= render_user_dashboard($items[$i], $i);
+    }
+    $temp .= '</tbody></table>';
+    return $temp;
 
 }
 ?>

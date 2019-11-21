@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' || $alert != "") {
     <form method="post">
         <input id="csrftoken" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
         <label for="name">Nome utente</label>
-        <input type="text" name="name" id="name" value="Guest">
+        <input type="text" name="name" id="name">
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
         <input type="submit" name="submit" value="Submit">
