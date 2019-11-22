@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             else {
                 //Check if provided invite link is valid
-                $invite = $_GET["ref"];
-                if ($invite != null) {
+                if (isset($_GET["ref"])) {
+                    $invite = $_GET["ref"];
                     $sql = "SELECT *
                         FROM invitetokens
                         WHERE token = :token";
@@ -77,27 +77,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $stm = $db->prepare($sql);
                             $stm->execute(array(":username" => $_POST["name"]));
                             $addeduser = $stm->fetch();
+                            //Invite link should be removed after successful registration
+                            $sql = 'DELETE from invitetokens WHERE token = :token';
+                            $stm = $db->prepare($sql);
+                            $stm->execute(array(":token" => $invite));
                             set_login_cookie($addeduser["userid"]);
                             header("Location: /index.php");
                             echo "Registered successfully";
                             die();
-                        }
-                        else {
+                        } else {
                             $alert = "Esiste già un utente con questo soprannome! Trovane un altro";
                         }
                     }
+                    else {
+                        $alert = "Il link di invito è scaduto, invalido o già usato.\n";
+                    }
                 }
                 else {
-                    $alert = "Non ci si può registrare senza un link d'invito! Se lo hai, apri il link completo";
+                    $alert = "Il link di invito è incompleto.\n";
                 }
             }
         }
         else {
-            $alert = "Mancano username o password!";
+            $alert = "Mancano username o password!\n";
         }
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'GET' || $alert != "") {
+    if (isset($_GET["ref"])) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
+            $invite = $_GET["ref"];
+            $db = get_db();
+            $sql = "SELECT *
+                        FROM invitetokens
+                        WHERE token = :token";
+            $stm = $db->prepare($sql);
+            $stm->execute(array(":token" => $invite));
+            $result = $stm->fetch();
+            if ($result == null) {
+                $alert .= "\nL'URL che stai cercando non corrisponde ad un invito valido.";
+            }
+        }
+    }
+    else {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $alert .= "Non ci si può registrare senza un link d'invito! Se lo hai, apri il link completo";
+        }
+    }
     $pageTitle = 'Registrazione';
     include 'templates/header.php';
     echo $alert;?>
