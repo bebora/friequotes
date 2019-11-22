@@ -16,4 +16,22 @@ $config = get_config();
 </head>
 
 <body>
-	<h1><a href="index.php"><?php echo $config->sitename?> 📜</a></h1>
+	<h1 style="display: inline-block"><a href="index.php"><?php echo $config->sitename?> 📜</a></h1>
+<?php
+if(isset($_COOKIE['token'])) {
+    $db = get_db();
+    $infosql = 'SELECT *
+            FROM users u
+            LEFT JOIN tokens t on t.userid = u.userid
+            WHERE t.token = :token
+            ';
+    $infostm = $db->prepare($infosql);
+    $infostm->execute(array(':token' => $_COOKIE['token']));
+    $inforesult = $infostm->fetch();
+    if ($inforesult != null) {
+        echo sprintf('<span style="float: right;">%s - %s</span>',
+            $inforesult['username'],
+            array('Guest 👀', 'Utente 👮', 'Moderatore 👮', 'Admin 👑')[$inforesult['auth_level']]);
+    }
+}
+?>

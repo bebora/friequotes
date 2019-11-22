@@ -152,7 +152,7 @@ function set_login_cookie($userid) {
 }
 
 function get_config() {
-    $jsonStr = file_get_contents("../default-config.json");
+    $jsonStr = file_get_contents("../config.json");
     $config = json_decode($jsonStr);
     return $config;
 }
