@@ -137,6 +137,7 @@ $target_dir = "/uploads/";
 $target_file = basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+$error_msg = '';
 // Check if image file is a actual image or fake image
 if(isset($_POST["submit"])) {
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
@@ -144,29 +145,48 @@ if(isset($_POST["submit"])) {
         $uploadOk = 1;
     } else {
         $uploadOk = 0;
+        $error_msg .= 'File non valido. ';
     }
 }
 // Check if file already exists
 if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
     $uploadOk = 0;
+    $error_msg .= 'Il file esiste già. ';
 }
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 5000000) {
-    echo "File troppo grosso";
+if ($_FILES["fileToUpload"]["size"] > 5*1024*1024) {
     $uploadOk = 0;
+    $error_msg .= 'File troppo grosso. ';
+}
+//Check if new file would go against total file limit config
+$io = popen('/usr/bin/du -sk ' . SITE_ROOT . '/uploads/', 'r');
+$size = fgets($io, 4096);
+$current_folder_size = intval(substr($size, 0, strpos($size, "\t")));
+pclose($io);
+$config = get_config();
+if ($_FILES["fileToUpload"]["size"]/1024 + $current_folder_size > $config->max_uploads_folder_KiB){
+    $uploadOk = 0;
+    $error_msg .= 'È finito lo spazio per conservare media. ';
 }
 // Allow certain file formats
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
-    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
     $uploadOk = 0;
+    $error_msg .= 'Solo i file JPG, JPEG, PNG e GIF sono ammessi. ';
+    $error_code = 415;
 }
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
+    if (isset($error_code)) {
+        http_response_code($error_code);
+    }
+    else {
+        http_response_code(403);
+    }
+    echo 'Non è stato possibile caricare il file. ' . $error_msg;
+    die();
 } else {
+    // if everything is ok, try to upload file
     $typefolder = array(
         'userpropic' => 'profilepics/',
         'usermedia' => 'usermedia/',

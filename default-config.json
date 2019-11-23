@@ -1,3 +1,4 @@
 {
-  "sitename": "Friequotes"
+  "sitename": "Friequotes",
+  "max_uploads_folder_KiB": 500000
 }

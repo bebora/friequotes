@@ -1,6 +1,6 @@
 <?php
 require '../common.php';
-$is_admin = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
+$is_admin = require_login(LoginLevel::ADMIN) == LoginResult::OK;
 $config = get_config();
 $pageTitle = $config->sitename . ' Home';
 include 'templates/header.php';
@@ -15,8 +15,6 @@ include 'templates/header.php';
     <?php if ($is_admin) {?>
     <li><a href="dashboard.php"><strong>⚙️ Dashboard</strong></a></li>
     <?php }?>
-    <br>
-    <li><a href="login.php"><strong>Login</strong></a></li>
 </ul>
 <br>
 <br>

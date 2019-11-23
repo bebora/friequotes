@@ -29,9 +29,12 @@ if(isset($_COOKIE['token'])) {
     $infostm->execute(array(':token' => $_COOKIE['token']));
     $inforesult = $infostm->fetch();
     if ($inforesult != null) {
-        echo sprintf('<span style="float: right;">%s - %s</span>',
+        echo sprintf('<span style="float: right;"><a href="login.php" title="Loggati come un altro utente">%s - %s</a></span>',
             $inforesult['username'],
             array('Guest 👀', 'Utente 👮', 'Moderatore 👮', 'Admin 👑')[$inforesult['auth_level']]);
     }
+}
+else {
+    echo '<span style="float: right;"><a href="login.php" title="Effettua il login">Login</a></span>';
 }
 ?>

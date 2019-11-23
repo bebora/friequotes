@@ -111,6 +111,4 @@ endif; ?>
     <input type="submit" name="submit" value="Invia">
 </form>
 
-<a href="index.php">Homepage</a>
-
 <?php require 'templates/footer.php'; ?>

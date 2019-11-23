@@ -4,6 +4,7 @@ require '../common.php';
 require "../render.php";
 check_token(LoginLevel::GUEST);
 $can_delete = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
+$can_upload_media = require_login(LoginLevel::USER) == LoginResult::OK;
 if (isset($_GET['id'])) {
     try  {
         $connection = get_db();
@@ -41,7 +42,7 @@ if (isset($_GET['id'])) {
 }
 if (isset($_POST['submit'])) {
     if ($can_delete) {
-        header("Location: /index.php");
+        header('Location: /index.php');
         try  {
             $connection = get_db();
             $connection->exec( 'PRAGMA foreign_keys = ON;' );
@@ -57,39 +58,41 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <?php
-$pageTitle = $result["title"];
+$pageTitle = $result['title'];
 $scripts = '<script src="scripts/upload.js" defer></script>';
 $extrastyle = '<link rel="stylesheet" href="css/usermedia.css">';
 include 'templates/header.php';
 ?>
     <?php echo render_post($result)?>
-    <?php
-        if (count($resultusers) > 0) {
-            echo "<p>Utenti taggati:";
-            foreach ($resultusers as $row) :
-                echo '<span class="usertag"><a href="userinfo.php?id=' . $row['entityid'] . '">' . escape($row['name']) . '</a></span>';
-            endforeach;
-            echo '</p>';
-        }
-        if (count($resultmedia) > 0) {
-            echo render_medias($resultmedia, count($resultmedia), '/uploads/postmedia/');
-        }
-    ?>
-    <form enctype="multipart/form-data" id="file-form" method="POST">
-        <div>
-            <h4>Carica una foto dell'evento</h4>
-            <p id="progressdiv"><progress max="100" value="0" id="progress" style="display: none;"></progress></p>
-            <input id="csrftoken" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-            <input type="file" name="file-select"  id="file-select">
-            <button type="submit" id="upload-button">Carica</button><br><br>
-        </div>
-    </form>
-    <?php if ($can_delete) {
-        ?>
-            <form id="delete-form" method="POST" onsubmit="return confirm('Vuoi davvero cancellare il post?');">
-                <button type="submit" id="delete-button" name="submit">Cancella post ❌</button>
-            </form>
-        <?php
-    }?>
+    <?php if (count($resultusers) > 0) {
+        echo '<p>Utenti taggati:';
+        foreach ($resultusers as $row) :
+            echo '<span class="usertag"><a href="userinfo.php?id=' . $row['entityid'] . '">' . escape($row['name']) . '</a></span>';
+        endforeach;
+        echo '</p>';
+    }
+    if (count($resultmedia) > 0) {
+        echo render_medias($resultmedia, count($resultmedia), '/uploads/postmedia/');
+    }
+    if ($can_upload_media) { ?>
+        <form enctype="multipart/form-data" id="file-form" method="POST">
+            <div>
+                <h4>Carica una foto dell'evento</h4>
+                <p id="progressdiv">
+                    <progress max="100" value="0" id="progress" style="display: none;"></progress>
+                </p>
+                <input id="csrftoken" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
+                <input type="file" name="file-select" id="file-select">
+                <button type="submit" id="upload-button">Carica</button>
+                <br><br>
+            </div>
+        </form>
+
+    <?php }
+    if ($can_delete) {?>
+        <form id="delete-form" method="POST" onsubmit="return confirm('Vuoi davvero cancellare il post?');">
+            <button type="submit" id="delete-button" name="submit">Cancella post ❌</button>
+        </form>
+    <?php }?>
     <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
 <?php require 'templates/footer.php'; ?>
