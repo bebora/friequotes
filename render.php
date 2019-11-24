@@ -138,6 +138,26 @@ function render_users_dashboard($items, $limit) {
     }
     $temp .= '</tbody></table>';
     return $temp;
+}
 
+function render_hashtag($item) {
+    return sprintf('
+        <a href="hashtagfeed.php?id=%d"><span class="hashtag">#%s</span></a>',
+        $item['id'],
+        $item['name']
+    );
+}
+
+function render_hashtags($items, $limit, $inline=false, $pretext=null) {
+    $temp = sprintf(
+        '<div%s>%s',
+        $inline ? ' class="hashtag-container-inline"' : ' class="hashtag-container"',
+        $pretext != null ? sprintf('<span>%s</span>', escape($pretext)) : ''
+    );
+    for ($i=0; $i<$limit; $i++) {
+        $temp .= render_hashtag($items[$i]);
+    }
+    $temp .= '</div>';
+    return $temp;
 }
 ?>

@@ -2,11 +2,11 @@ let entities = [];
 let entitiesDiv = document.getElementById('entdiv');
 function createEntityElem(item) {
     let newEnt = document.createElement('span');
-    newEnt.classList.add('entityElem');
+    newEnt.classList.add('entity-elem');
     newEnt.innerText = item.label;
     let removeButton = document.createElement('span');
     removeButton.innerText = '❌';
-    removeButton.classList.add('removeButton');
+    removeButton.classList.add('remove-button');
     removeButton.onclick = removeEntity;
     newEnt.appendChild(removeButton);
     newEnt.dataset.userid = item.value;

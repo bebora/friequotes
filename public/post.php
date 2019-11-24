@@ -27,6 +27,15 @@ if (isset($_GET['id'])) {
         $statement->execute();
         $resultusers = $statement->fetchAll();
 
+        $getHashtagsQuery = "SELECT *
+                FROM tags
+                JOIN posthashtags p on tags.id = p.tagid
+                WHERE postid = :postid";
+        $getHashtags = $connection->prepare($getHashtagsQuery);
+        $getHashtags->bindParam(':postid', $id, PDO::PARAM_INT);
+        $getHashtags->execute();
+        $resultHashtags = $getHashtags->fetchAll();
+
         //Then get media for this post
         $sql = "SELECT  mediapath 
             FROM postsmedia
@@ -70,6 +79,9 @@ include 'templates/header.php';
             echo '<span class="usertag"><a href="userinfo.php?id=' . $row['entityid'] . '">' . escape($row['name']) . '</a></span>';
         endforeach;
         echo '</p>';
+    }
+    if (count($resultHashtags) > 0) {
+        echo render_hashtags($resultHashtags, count($resultHashtags), true, 'Hashtag: ');
     }
     if (count($resultmedia) > 0) {
         echo render_medias($resultmedia, count($resultmedia), '/uploads/postmedia/');

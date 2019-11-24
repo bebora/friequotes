@@ -265,17 +265,33 @@ textarea {
 .entdiv {
     margin: 5px;
 }
-.entityElem {
-    border: black solid 1px;
+.entity-elem, .hashtag {
+    border: black solid 2px;
     border-radius: 5px;
-    min-width: 100px;
     display: inline-block;
     padding: 2px;
     margin-right: 5px;
+}
+.entity-elem {
+    min-width: 100px;
     background: linear-gradient(lightblue 0%, white 100%);
 }
-.removeButton {
+.hashtag {
+    background: linear-gradient(lightyellow 0%, white 100%);
+}
+.remove-button {
     float: right;
     cursor: pointer;
+    margin-left: 5px;
+}
+
+.hashtag-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    font-size: 23px;
+}
+
+.hashtag-container-inline {
     margin-left: 5px;
 }

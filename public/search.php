@@ -92,23 +92,8 @@ if (isset($_GET['query'])) {
         <?php if($mode == 0) {
             echo render_users_searchpage($result, count($result));
         }
-        else if($mode == 1) {?>
-            <table>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Hashtag</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($result as $row) : ?>
-                    <tr>
-                        <td><a href="hashtagfeed.php?id=<?php echo escape($row["id"])?>"><?php echo escape($row["id"]); ?></a></td>
-                        <td><a href="hashtagfeed.php?id=<?php echo escape($row["id"])?>"><?php echo escape($row["name"]); ?></a></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+        else if($mode == 1) {
+            echo render_hashtags($result, count($result));?>
         <?php }
         else if($mode == 2) {
             echo render_posts($result, count($result));

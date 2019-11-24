@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      * -Create invite token: grantlevel
      * -Remove invite token: revoketoken
      */
-    $grant = $_POST['grantlevel'];
-    if (isset($grant)) {
+    if (isset($_POST['grantlevel'])) {
+        $grant = $_POST['grantlevel'];
         if ($grant < 0)
             $grant = 0;
         if ($grant > 3)
