@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
         $taggedtags = array();
         $stmt = $connection->prepare('SELECT * FROM entities WHERE id = :id');
         foreach (explode(',', $_POST['taggedEnts']) as $temp) {
-            if ($temp == '') continue;
+            if (trim($temp) == '') continue;
             $id = intval(trim($temp));
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
