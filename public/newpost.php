@@ -41,41 +41,39 @@ if (isset($_POST['submit'])) {
 
         $taggedentities = array();
         $taggedtags = array();
-        foreach (explode(',', $_POST['users']) as $temp) {
-            if ($temp == "") continue;
-            $stmt = $connection->prepare('SELECT * FROM entities WHERE name like :name');
-            $name = '%'.trim($temp).'%';
-            $stmt->bindParam(':name', $name);
+        $stmt = $connection->prepare('SELECT * FROM entities WHERE id = :id');
+        foreach (explode(',', $_POST['taggedEnts']) as $temp) {
+            if ($temp == '') continue;
+            $id = intval(trim($temp));
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->fetchAll();
-            if (count($result) > 0) {
-                $id = $result[0]["id"];
+            $result = $stmt->fetch();
+            if ($result != null) {
                 if (!in_array($id, $taggedentities)) {
                     array_push($taggedentities, $id);
-                    $sql = "INSERT INTO postusertags(postid, entityid) values (:postid, :id)";
+                    $sql = 'INSERT INTO postusertags(postid, entityid) values (:postid, :id)';
                     $stmt = $connection->prepare($sql);
-                    $stmt->execute(array("postid" => $postid, "id" => $id));
+                    $stmt->execute(array('postid' => $postid, 'id' => $id));
                 }
             }
         }
         //Get all input values separated by commas as an array
+        $insertHashtag = $connection->prepare('INSERT OR IGNORE INTO tags(name) VALUES(:name)');
+        $selectTag = $connection->prepare('SELECT * FROM tags WHERE name = :name');
+        $insertPostHashtag = $connection->prepare('INSERT INTO posthashtags(postid, tagid) values (:postid, :id)');
         foreach (explode(',', $_POST['tags']) as $temp) {
             if ($temp == "") continue;
             $name = ucfirst(strtolower(preg_replace('/\s*(#)*([^\s]*)\s*/', '$2', $temp)));  //Remove hash symbol and whitespaces, then capitalize first letter
-            $stmt = $connection->prepare('INSERT OR IGNORE INTO tags(name) VALUES(:name)');
-            $stmt->bindParam(':name', $name);
-            $stmt->execute();
-            $stmt = $connection->prepare('SELECT * FROM tags WHERE name = :name');
-            $stmt->bindParam(':name', $name);
-            $stmt->execute();
-            $result = $stmt->fetchAll();
-            if (count($result) > 0) {
-                $id = $result[0]["id"];
+            $insertHashtag->bindParam(':name', $name);
+            $insertHashtag->execute();
+            $selectTag->bindParam(':name', $name);
+            $selectTag->execute();
+            $result = $selectTag->fetch();
+            if ($result != null) {
+                $id = $result['id'];
                 if (!in_array($id, $taggedtags)) {
                     array_push($taggedtags, $id);
-                    $sql = "INSERT INTO posthashtags(postid, tagid) values (:postid, :id)";
-                    $stmt = $connection->prepare($sql);
-                    $stmt->execute(array("postid" => $postid, "id" => $id));
+                    $insertPostHashtag->execute(array('postid' => $postid, 'id' => $id));
                 }
             }
         }
@@ -85,7 +83,10 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <?php
-$pageTitle = "Nuovo post";
+$pageTitle = 'Nuovo post';
+$scripts = '<script src="scripts/autocomplete.min.js" defer></script>
+            <script src="scripts/postsuggestions.js" defer></script>';
+$extrastyle = '<link rel="stylesheet" type="text/css" href="css/autocomplete.min.css">';
 require "templates/header.php";?>
 
 <?php if (isset($_POST['submit']) && $statement) :
@@ -104,11 +105,15 @@ endif; ?>
     <br>
     <label for="description">Descrizione</label>
     <textarea rows="4" cols="50" name="description" id="description"></textarea>
-    <label for="users">Personaggi coinvolti separati da virgole</label>
-    <textarea rows="4" cols="50" name="users" id="users"></textarea>
     <label for="tags">Hashtag/contesto (separati da virgole se multipli)</label>
     <textarea rows="4" cols="50" name="tags" id="tags"></textarea>
+    <label for="autocompInput">Inserisci uno o più personaggi taggati</label>
+    <input id="autocompInput" type="text" />
+    <div id="entdiv" class="entdiv"></div>
+    <input id="hiddenEnts" name="taggedEnts" type="hidden">
+    <br>
     <input type="submit" name="submit" value="Invia">
 </form>
+
 
 <?php require 'templates/footer.php'; ?>

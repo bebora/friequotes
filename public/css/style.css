@@ -262,3 +262,20 @@ textarea {
     text-align: center;
     vertical-align: middle;
 }
+.entdiv {
+    margin: 5px;
+}
+.entityElem {
+    border: black solid 1px;
+    border-radius: 5px;
+    min-width: 100px;
+    display: inline-block;
+    padding: 2px;
+    margin-right: 5px;
+    background: linear-gradient(lightblue 0%, white 100%);
+}
+.removeButton {
+    float: right;
+    cursor: pointer;
+    margin-left: 5px;
+}

@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
 <?php
 $pageTitle = $result['title'];
 $scripts = '<script src="scripts/upload.js" defer></script>';
-$extrastyle = '<link rel="stylesheet" href="css/usermedia.css">';
+$extrastyle = '<link rel="stylesheet" type="text/css" href="css/usermedia.css">';
 include 'templates/header.php';
 ?>
     <?php echo render_post($result)?>

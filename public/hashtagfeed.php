@@ -1,6 +1,7 @@
 <?php
 
 require '../common.php';
+require '../render.php';
 check_token(LoginLevel::GUEST);
 if (isset($_GET['id'])) {
     try  {
