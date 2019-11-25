@@ -207,6 +207,8 @@ html, body {
 
 .nounderline {
     text-decoration: none;
+    width: 100%;
+    display: inline-block;
 }
 
 .userthumb {
@@ -278,6 +280,7 @@ textarea {
 }
 .hashtag {
     background: linear-gradient(lightyellow 0%, white 100%);
+    padding: 3px;
 }
 .remove-button {
     float: right;

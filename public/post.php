@@ -4,6 +4,7 @@ require '../common.php';
 require "../render.php";
 check_token(LoginLevel::GUEST);
 $can_delete = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
+$can_edit = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
 $can_upload_media = require_login(LoginLevel::USER) == LoginResult::OK;
 if (isset($_GET['id'])) {
     try  {
@@ -121,6 +122,11 @@ include 'templates/header.php';
         <form id="delete-form" method="POST" onsubmit="return confirm('Vuoi davvero cancellare il post?');">
             <button type="submit" id="delete-button" name="submit">Cancella post ❌</button>
         </form>
+    <?php } ?>
+    <?php if ($can_edit && isset($_GET['id'])) {?>
+        <a style="margin-bottom: 300px;" href="newpost.php?postid=<?php echo $_GET['id'] ?>">Modifica post ✏️</a>
     <?php }?>
+
+    <br><br>
     <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
 <?php require 'templates/footer.php'; ?>

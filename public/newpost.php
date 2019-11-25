@@ -2,43 +2,79 @@
 
 /**
  * Use an HTML form to create a new entry in the
- * users table.
+ * users table or to edit an existing one.
  *
  */
 
 require '../common.php';
 check_token(LoginLevel::USER);
+$can_edit = require_login(LoginLevel::MODERATOR) == LoginResult::OK;
+if (isset($_GET['postid']))
+    $postid = $_GET['postid'];
 if (isset($_POST['submit'])) {
     if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+    try {
+        if (isset($postid)) {
+            //Only mods can edit posts
+            check_token(LoginLevel::MODERATOR);
 
-    try  {
-        $connection = get_db();
-        $new_post = array(
-            "title" => $_POST['title'],
-            "description" => $_POST['description'],
-            "created" => date("c"),
-            "lastedit" => date("c"),
-        );
+            $db = get_db();
+            //$db->exec( 'PRAGMA foreign_keys = ON;' );
+            $updatePost = $db->prepare(
+                    "UPDATE posts
+                    SET title = :title, description = :description, lastedit = :lastedit
+                    WHERE id = :postid ");
+            $updatePost->execute(array(
+                ':postid' => $postid,
+                ':title' => $_POST['title'],
+                ':description' => $_POST['description'],
+                ':lastedit' => date('c')
+            ));
+            //Delete hashtags and usertags, they will be regenerated
+            $deleteHashtags = $db->prepare(
+                    "DELETE
+                    FROM posthashtags
+                    WHERE postid = :postid"
+            );
+            $deleteHashtags->execute(array(':postid' => $postid));
+            $deleteUsertags = $db->prepare(
+                "DELETE
+                    FROM postusertags
+                    WHERE postid = :postid"
+            );
+            $deleteUsertags->execute(array(':postid' => $postid));
+        }
+        else {
+            $connection = get_db();
+            $new_post = array(
+                "title" => $_POST['title'],
+                "description" => $_POST['description'],
+                "created" => date("c"),
+                "lastedit" => date("c"),
+            );
 
-        $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "posts",
-            implode(", ", array_keys($new_post)),
-            ":" . implode(", :", array_keys($new_post))
-        );
+            $sql = sprintf(
+                "INSERT INTO %s (%s) values (%s)",
+                "posts",
+                implode(", ", array_keys($new_post)),
+                ":" . implode(", :", array_keys($new_post))
+            );
 
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_post);
-        //$postid = $connection->lastInsertId(); not thread safe
+            $statement = $connection->prepare($sql);
+            $statement->execute($new_post);
+            //$postid = $connection->lastInsertId(); not thread safe
 
-        $sql = sprintf(
-            "SELECT id FROM posts WHERE %s",
-            implode(" and ", array_map(function($x) {return sprintf("%s = :%s", $x, $x);}, array_keys($new_post)))
-        );
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_post);
-        $postid = $statement->fetch()["id"];
-
+            $sql = sprintf(
+                "SELECT id FROM posts WHERE %s",
+                implode(" and ", array_map(function ($x) {
+                    return sprintf("%s = :%s", $x, $x);
+                }, array_keys($new_post)))
+            );
+            $statement = $connection->prepare($sql);
+            $statement->execute($new_post);
+            $postid = $statement->fetch()["id"];
+        }
+        // In every case, add entities and tags to the post as if they are new
         $taggedentities = array();
         $taggedtags = array();
         $stmt = $connection->prepare('SELECT * FROM entities WHERE id = :id');
@@ -77,7 +113,8 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
-    } catch(PDOException $error) {
+    }
+    catch(PDOException $error) {
         echo $error->getMessage();
     }
 }
@@ -109,11 +146,15 @@ endif; ?>
     <textarea rows="4" cols="50" name="tags" id="tags"></textarea>
     <label for="autocompInput">Inserisci uno o più personaggi taggati</label>
     <input id="autocompInput" type="text" />
-    <div id="entdiv" class="entdiv"></div>
+    <div id="entdiv" class="entdiv"><?php if(isset($entdiv)) echo $entdiv;?></div>
     <input id="hiddenEnts" name="taggedEnts" type="hidden">
     <br>
     <input type="submit" name="submit" value="Invia">
 </form>
 
-
-<?php require 'templates/footer.php'; ?>
+<?php
+if (isset($can_edit)) { ?>
+    <script src="scripts/fillpost.js" defer></script>
+    <script defer src="data:text/javascript, fillpost(<?php echo escape($postid)?>) "></script>
+<?php }
+require 'templates/footer.php'; ?>

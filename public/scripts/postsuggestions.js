@@ -1,5 +1,5 @@
-let entities = [];
-let entitiesDiv = document.getElementById('entdiv');
+var entities = [];
+var entitiesDiv = document.getElementById('entdiv');
 function createEntityElem(item) {
     let newEnt = document.createElement('span');
     newEnt.classList.add('entity-elem');
