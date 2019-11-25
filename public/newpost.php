@@ -127,10 +127,10 @@ $scripts = '<script src="scripts/autocomplete.min.js" defer></script>
 $extrastyle = '<link rel="stylesheet" type="text/css" href="css/autocomplete.min.css">';
 require "templates/header.php";?>
 
-<?php if (isset($_POST['submit']) && $created) :
+<?php if (isset($_POST['submit']) && isset($created)) :
     echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiunta con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
 endif; ?>
-<?php if (isset($_POST['submit']) && $updated) :
+<?php if (isset($_POST['submit']) && isset($updated)) :
     echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiornata con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
 endif; ?>
 <?php if (isset($_POST['submit']) && !$statement) : ?>
