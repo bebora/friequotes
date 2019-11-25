@@ -74,6 +74,7 @@ if (isset($_GET['query'])) {
 $config = get_config();
 $pageTitle = 'Ricerca ' . $config->sitename;
 include 'templates/header.php';
+if (!isset($_GET['noheading'])) {
 ?>
     <h2>Trova utenti, post o collezioni di post</h2>
     <p>Testo normale: ricerca post; testo preceduto da @: ricerca utenti; testo preceduto da #: ricerca collezioni</p>
@@ -85,11 +86,13 @@ include 'templates/header.php';
             <input id="enabledesc" name="enabledesc" type="checkbox" value="1" > Cerca anche nella descrizione dei post
         </label>
     </form>
-<?php
+<?php }
 if (isset($_GET['query'])) {
-    if ($result && count($result) > 0) { ?>
-        <h2>Risultati</h2>
-        <?php if($mode == 0) {
+    if ($result && count($result) > 0) {
+        if (!isset($_GET['noheading'])) {?>
+            <h2>Risultati</h2>
+        <?php }
+        if($mode == 0) {
             echo render_users_searchpage($result, count($result));
         }
         else if($mode == 1) {

@@ -194,8 +194,8 @@ if ($uploadOk == 0) {
     );
     $finalName = $target_file . time() . '.' .$imageFileType;
     if (isset($_POST['type'])) {
-        check_token(LoginLevel::MODERATOR);
         if ($_POST['type'] == 'userpropic' && isset($_POST['id'])) {
+            check_token(LoginLevel::MODERATOR);
             $pathname = SITE_ROOT . $target_dir . $typefolder[$_POST['type']] .$finalName;
             $connection = get_db();
             $sql = "UPDATE entities 
