@@ -12,8 +12,8 @@ if (isset($_GET['id'])) {
         $id = $_GET['id'];
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetch();
-        if ($result == null) {
+        $resultPost = $stmt->fetch();
+        if ($resultPost == null) {
             header("Location: /index.php");
             echo "Non esiste alcun post con questo id";
             die();
@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
         $statement = $connection->prepare($sql);
         $statement->bindParam(':postid', $id, PDO::PARAM_INT);
         $statement->execute();
-        $resultusers = $statement->fetchAll();
+        $resultUsertags = $statement->fetchAll();
 
         $getHashtagsQuery = "SELECT *
                 FROM tags
@@ -45,6 +45,22 @@ if (isset($_GET['id'])) {
         $statement->bindParam(':id', $id, PDO::PARAM_STR);
         $statement->execute();
         $resultmedia = $statement->fetchAll();
+        if (isset($_GET['json']) && $_GET['json'] == 'true') {
+            $json = new ArrayObject();
+            $json['title'] = $resultPost['title'];
+            $json['description'] = $resultPost['description'];
+            $json['created'] = $resultPost['created'];
+            $json['lastedit'] = $resultPost['lastedit'];
+            $json['tags'] = array_map(function ($item) {
+                return new ArrayObject(array('tagid' => $item['tagid'], 'name' => $item['name']));
+            }, $resultHashtags);
+            $json['entities'] = array_map(function ($item) {
+                return new ArrayObject(array('entityid' => $item['entityid'], 'name' => $item['name']));
+            }, $resultUsertags);
+            header('Content-Type: application/json');
+            echo json_encode($json, JSON_PRETTY_PRINT);
+            die();
+        }
     } catch(PDOException $error) {
         echo $error->getMessage();
     }
@@ -67,15 +83,15 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <?php
-$pageTitle = $result['title'];
+$pageTitle = $resultPost['title'];
 $scripts = '<script src="scripts/upload.js" defer></script>';
 $extrastyle = '<link rel="stylesheet" type="text/css" href="css/usermedia.css">';
 include 'templates/header.php';
 ?>
-    <?php echo render_post($result)?>
-    <?php if (count($resultusers) > 0) {
+    <?php echo render_post($resultPost)?>
+    <?php if (count($resultUsertags) > 0) {
         echo '<p>Utenti taggati:';
-        foreach ($resultusers as $row) :
+        foreach ($resultUsertags as $row) :
             echo '<span class="usertag"><a href="userinfo.php?id=' . $row['entityid'] . '">' . escape($row['name']) . '</a></span>';
         endforeach;
         echo '</p>';
