@@ -14,11 +14,10 @@ if (isset($_GET['postid']))
 if (isset($_POST['submit'])) {
     if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
     try {
+        $db = get_db();
         if (isset($postid)) {
             //Only mods can edit posts
             check_token(LoginLevel::MODERATOR);
-
-            $db = get_db();
             //$db->exec( 'PRAGMA foreign_keys = ON;' );
             $updatePost = $db->prepare(
                     "UPDATE posts
@@ -43,9 +42,9 @@ if (isset($_POST['submit'])) {
                     WHERE postid = :postid"
             );
             $deleteUsertags->execute(array(':postid' => $postid));
+            $updated = true;
         }
         else {
-            $connection = get_db();
             $new_post = array(
                 "title" => $_POST['title'],
                 "description" => $_POST['description'],
@@ -60,7 +59,7 @@ if (isset($_POST['submit'])) {
                 ":" . implode(", :", array_keys($new_post))
             );
 
-            $statement = $connection->prepare($sql);
+            $statement = $db->prepare($sql);
             $statement->execute($new_post);
             //$postid = $connection->lastInsertId(); not thread safe
 
@@ -70,14 +69,16 @@ if (isset($_POST['submit'])) {
                     return sprintf("%s = :%s", $x, $x);
                 }, array_keys($new_post)))
             );
-            $statement = $connection->prepare($sql);
+            $statement = $db->prepare($sql);
             $statement->execute($new_post);
             $postid = $statement->fetch()["id"];
+            if ($postid != null)
+                $created = true;
         }
         // In every case, add entities and tags to the post as if they are new
         $taggedentities = array();
         $taggedtags = array();
-        $stmt = $connection->prepare('SELECT * FROM entities WHERE id = :id');
+        $stmt = $db->prepare('SELECT * FROM entities WHERE id = :id');
         foreach (explode(',', $_POST['taggedEnts']) as $temp) {
             if (trim($temp) == '') continue;
             $id = intval(trim($temp));
@@ -88,15 +89,15 @@ if (isset($_POST['submit'])) {
                 if (!in_array($id, $taggedentities)) {
                     array_push($taggedentities, $id);
                     $sql = 'INSERT INTO postusertags(postid, entityid) values (:postid, :id)';
-                    $stmt = $connection->prepare($sql);
+                    $stmt = $db->prepare($sql);
                     $stmt->execute(array('postid' => $postid, 'id' => $id));
                 }
             }
         }
         //Get all input values separated by commas as an array
-        $insertHashtag = $connection->prepare('INSERT OR IGNORE INTO tags(name) VALUES(:name)');
-        $selectTag = $connection->prepare('SELECT * FROM tags WHERE name = :name');
-        $insertPostHashtag = $connection->prepare('INSERT INTO posthashtags(postid, tagid) values (:postid, :id)');
+        $insertHashtag = $db->prepare('INSERT OR IGNORE INTO tags(name) VALUES(:name)');
+        $selectTag = $db->prepare('SELECT * FROM tags WHERE name = :name');
+        $insertPostHashtag = $db->prepare('INSERT INTO posthashtags(postid, tagid) values (:postid, :id)');
         foreach (explode(',', $_POST['tags']) as $temp) {
             if ($temp == "") continue;
             $name = ucfirst(strtolower(preg_replace('/\s*(#)*([^\s]*)\s*/', '$2', $temp)));  //Remove hash symbol and whitespaces, then capitalize first letter
@@ -126,10 +127,12 @@ $scripts = '<script src="scripts/autocomplete.min.js" defer></script>
 $extrastyle = '<link rel="stylesheet" type="text/css" href="css/autocomplete.min.css">';
 require "templates/header.php";?>
 
-<?php if (isset($_POST['submit']) && $statement) :
+<?php if (isset($_POST['submit']) && $created) :
     echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiunta con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
 endif; ?>
-
+<?php if (isset($_POST['submit']) && $updated) :
+    echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiornata con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
+endif; ?>
 <?php if (isset($_POST['submit']) && !$statement) : ?>
     <blockquote>"<?php echo escape($_POST['title']); ?>" non aggiunta.</blockquote>
 <?php endif; ?>
