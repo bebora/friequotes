@@ -121,12 +121,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' || $alert != "") {
     }
     else {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $alert .= "Non ci si può registrare senza un link d'invito! Se lo hai, apri il link completo";
+            $alert .= "Non ci si può registrare senza un link d'invito! Se lo hai, apri il link completo. ";
         }
     }
     $pageTitle = 'Registrazione';
     include 'templates/header.php';
-    echo $alert;?>
+    echo $alert;
+    if (is_user_table_empty()) {
+        echo 'Sei il primo utente, verrai registrato come admin. ';
+    }?>
     <form method="post">
         <input id="csrftoken" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
         <label for="name">Nome utente</label>
