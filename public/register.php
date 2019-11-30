@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if (isset($_POST['password']) && isset($_POST['name'])) {
             $db = get_db();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if (is_user_table_empty()) {
                 $admin = array(
                     "username" => $_POST["name"],

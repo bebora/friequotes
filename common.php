@@ -1,6 +1,8 @@
 <?php
 ini_set('session.cache_limiter','public');
 session_cache_limiter(false);
+error_reporting(-1);
+ini_set('display_errors', 'On');
 session_start();
 
 if (empty($_SESSION['csrf'])) {
@@ -152,7 +154,7 @@ function set_login_cookie($userid) {
 }
 
 function get_config() {
-    $jsonStr = file_get_contents("../config.json");
+    $jsonStr = file_get_contents(__DIR__ . "/config.json");
     $config = json_decode($jsonStr);
     return $config;
 }
