@@ -102,7 +102,7 @@ include 'templates/header.php';
         echo render_hashtags($resultHashtags, count($resultHashtags), true, 'Hashtag: ');
     }
     if (count($resultmedia) > 0) {
-        echo render_medias($resultmedia, count($resultmedia), '/uploads/postmedia/');
+        echo render_medias($resultmedia, count($resultmedia), '/uploads/postmedia/', $can_delete);
     }
     if ($can_upload_media) { ?>
         <form enctype="multipart/form-data" id="file-form" method="POST">
@@ -129,6 +129,10 @@ include 'templates/header.php';
     <?php }?>
 
     <br><br>
-    <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
-    <script defer src="data:text/javascript, addRemoveMediaListeners('postmedia'); "></script>
-<?php require 'templates/footer.php'; ?>
+    <?php if ($can_upload_media) { ?>
+        <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
+    <?php }
+    if ($can_delete) { ?>
+        <script defer src="data:text/javascript, addRemoveMediaListeners('postmedia'); "></script>
+    <?php }
+require 'templates/footer.php'; ?>

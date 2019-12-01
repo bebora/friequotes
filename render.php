@@ -1,17 +1,17 @@
 <?php
 require_once "common.php";
 
-function render_media($item, $media_prefix) {
+function render_media($item, $media_prefix, $can_remove) {
     return '<div class="img-container">
-                <img src="' . $media_prefix . $item['mediapath'] . '" alt="' . basename($item['mediapath']) . '">
-                <span class="removemedia-button" data-mediaid="' . $item['mediaid'] . '">❌</span>
-            </div>';
+                <img src="' . $media_prefix . $item['mediapath'] . '" alt="' . basename($item['mediapath']) . '">' .
+                ($can_remove ? '<span class="removemedia-button" data-mediaid="' . $item['mediaid'] . '">❌</span>' : '') .
+            '</div>';
 }
 
-function render_medias($result, $pagelimit, $media_prefix) {
+function render_medias($result, $pagelimit, $media_prefix, $can_remove) {
     $strbuilder = '';
     for ($i=0; $i<$pagelimit; $i++) {
-        $strbuilder .= render_media($result[$i], $media_prefix);
+        $strbuilder .= render_media($result[$i], $media_prefix, $can_remove);
     }
     return $strbuilder;
 }
