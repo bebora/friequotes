@@ -16,7 +16,6 @@ if (isset($_POST['media_type']) && isset($_POST['mediaid'])) {
             $remove_query = 'DELETE 
                             FROM ' . $allowed_types[$media_type] .
                             ' WHERE mediaid = :mediaid';
-            error_log($remove_query);
             $remove_stm = $db->prepare($remove_query);
             $remove_stm->bindValue(':mediaid', $mediaid, PDO::PARAM_INT);
             $remove_stm->execute();
