@@ -22,7 +22,8 @@ if (isset($_GET['query'])) {
                     $mode = 0;
                     $sql = "SELECT * 
                     FROM entities
-                    WHERE name LIKE :name";
+                    WHERE name LIKE :name
+                    ORDER BY name";
                     $name = '%'.substr($_GET['query'], 1).'%';
                     $statement = $connection->prepare($sql);
                     $statement->bindParam(':name', $name, PDO::PARAM_STR);
@@ -34,7 +35,8 @@ if (isset($_GET['query'])) {
                     $mode = 1;
                     $sql = "SELECT  *
                     FROM tags
-                    WHERE name LIKE :name";
+                    WHERE name LIKE :name
+                    ORDER BY name";
 
                     $name = '%'.substr($_GET['query'], 1).'%';
                     $statement = $connection->prepare($sql);
