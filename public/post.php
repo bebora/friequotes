@@ -38,7 +38,7 @@ if (isset($_GET['id'])) {
         $resultHashtags = $getHashtags->fetchAll();
 
         //Then get media for this post
-        $sql = "SELECT  mediapath 
+        $sql = "SELECT  mediapath, mediaid
             FROM postsmedia
             WHERE postid = :id
             ORDER BY created";
@@ -85,7 +85,8 @@ if (isset($_POST['submit'])) {
 ?>
 <?php
 $pageTitle = $resultPost['title'];
-$scripts = '<script src="scripts/upload.js" defer></script>';
+$scripts = '<script src="scripts/upload.js" defer></script>
+            <script src="scripts/removemedia.js" defer></script>';
 $extrastyle = '<link rel="stylesheet" type="text/css" href="css/usermedia.css">';
 include 'templates/header.php';
 ?>
@@ -129,4 +130,5 @@ include 'templates/header.php';
 
     <br><br>
     <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
+    <script defer src="data:text/javascript, addRemoveMediaListeners('postmedia'); "></script>
 <?php require 'templates/footer.php'; ?>

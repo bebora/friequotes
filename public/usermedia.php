@@ -12,7 +12,7 @@ if (isset($_GET['id'])) {
         $stmt->execute();
         $result = $stmt->fetch();
         $name = $result['name'];
-        $sql = "SELECT  mediapath 
+        $sql = "SELECT  mediapath, mediaid
                 FROM entitiesmedia
                 WHERE entityid = :id
                 ORDER BY created";
@@ -27,7 +27,8 @@ if (isset($_GET['id'])) {
 ?>
 <?php
 $pageTitle = $name . " - Media";
-$scripts = '<script src="scripts/upload.js" defer></script>';
+$scripts = '<script src="scripts/upload.js" defer></script>
+            <script src="scripts/removemedia.js" defer></script>';
 $extrastyle = '<link rel="stylesheet" href="css/usermedia.css">';
 
 include 'templates/header.php';
@@ -44,4 +45,5 @@ include 'templates/header.php';
         </div>
     </form>
     <script defer src="data:text/javascript, uploadmedia('usermedia'); "></script>
+    <script defer src="data:text/javascript, addRemoveMediaListeners('usermedia'); "></script>
 <?php require 'templates/footer.php'; ?>

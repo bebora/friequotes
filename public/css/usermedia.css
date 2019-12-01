@@ -1,18 +1,30 @@
-img {
+.img-container {
     width: 32%;
     height: auto;
     border: 2px solid blue;
     margin: 1px;
     vertical-align: top;
     border-radius: 5px;
+    position: relative;
+    display: inline-block;
+}
+.img-container img {
+    width: 100%;
+    display: block;
 }
 @media only screen and (max-width: 800px) {
-    img {
+    .img-container {
         width: 48.5%;
     }
 }
 @media only screen and (max-width: 600px) {
-    img {
+    .img-container {
         width: 98%;
     }
+}
+.removemedia-button {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    cursor: pointer;
 }

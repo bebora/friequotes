@@ -1,7 +1,11 @@
 <?php
 require_once "common.php";
+
 function render_media($item, $media_prefix) {
-    return '<img src="' . $media_prefix . $item['mediapath'] . '" alt="' . basename($item['mediapath']) . '">';
+    return '<div class="img-container">
+                <img src="' . $media_prefix . $item['mediapath'] . '" alt="' . basename($item['mediapath']) . '">
+                <span class="removemedia-button" data-mediaid="' . $item['mediaid'] . '">❌</span>
+            </div>';
 }
 
 function render_medias($result, $pagelimit, $media_prefix) {

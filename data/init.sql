@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	PRIMARY KEY("userid")
 );
 CREATE TABLE IF NOT EXISTS "entitiesmedia" (
+    "mediaid" INTEGER PRIMARY KEY,
 	"entityid"	INTEGER,
 	"mediapath"	TEXT,
 	"created"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -53,6 +54,7 @@ CREATE TABLE IF NOT EXISTS "invitetokens" (
 	"author" INTEGER
 );
 CREATE TABLE IF NOT EXISTS "postsmedia" (
+    "mediaid" INTEGER PRIMARY KEY,
     "postid" INTEGER NOT NULL,
     "mediapath"	TEXT,
     "created"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
