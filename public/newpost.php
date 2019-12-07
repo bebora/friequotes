@@ -141,7 +141,7 @@ endif; ?>
 <form method="post">
     <input id="csrftoken" name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
     <label for="title">Titolo</label>
-    <input type="text" name="title" id="title">
+    <textarea rows="1" cols="50" name="title" id="title"></textarea>
     <br>
     <label for="description">Descrizione</label>
     <textarea rows="4" cols="50" name="description" id="description"></textarea>
