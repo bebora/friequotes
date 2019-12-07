@@ -1,8 +1,8 @@
 <?php
 ini_set('session.cache_limiter','public');
 session_cache_limiter(false);
-error_reporting(-1);
-ini_set('display_errors', 'On');
+ini_set('display_errors',1);
+error_reporting(E_ALL);
 session_start();
 
 if (empty($_SESSION['csrf'])) {

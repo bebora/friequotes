@@ -1,4 +1,7 @@
 {
   "sitename": "Friequotes",
-  "max_uploads_folder_KiB": 500000
+  "max_uploads_folder_KiB": 500000,
+  "next_event_name": "Example",
+  "next_event_timestamp": 1577836800,
+  "next_event_image": "picture.jpg"
 }

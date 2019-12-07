@@ -298,3 +298,21 @@ textarea {
 .hashtag-container-inline {
     margin-left: 5px;
 }
+.parentcountdown {
+    display: flex;
+    height: 100%;
+}
+.childcountdown {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.line-break {
+    width: 100%;
+}
+.childcountdown * {
+    font-size: 28px;
+}

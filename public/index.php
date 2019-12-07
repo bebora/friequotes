@@ -32,5 +32,74 @@ include 'templates/header.php';
 </ul>
 <br>
 <br>
+<?php //Show countdown if configured
+if (isset($config->next_event_name) && isset($config->next_event_timestamp)) {
+    if (time() < $config->next_event_timestamp) { ?>
+        <h1>Countdown <?php echo $config->next_event_name ?></h1>
+        <div class="parentcountdown">
+            <div class="childcountdown">
+                <div id="days" style="font-size: 52px">--</div>
+                <div class="line-break"></div>
+                <div>Giorni</div>
+            </div>
+            <div class="childcountdown">
+                <div id="hours" style="font-size: 52px">--</div>
+                <div class="line-break"></div>
+                <div>Ore</div>
+            </div>
+            <div class="childcountdown">
+                <div id="minutes" style="font-size: 52px">--</div>
+                <div class="line-break"></div>
+                <div>Minuti</div>
+            </div>
+            <div class="childcountdown">
+                <div id="seconds" style="font-size: 52px">--</div>
+                <div class="line-break"></div>
+                <div>Secondi</div>
+            </div>
+        </div>
+        <img src="<?php echo $config->next_event_image ?>" style="width: 100%" alt="<?php echo $config->next_event_name ?>">
+        <script>
+            //https://gist.github.com/adriennetacke/f5a25c304f1b7b4a6fa42db70415bad2#file-countdown-js
+            function countdown(endDate) {
+                let days, hours, minutes, seconds;
 
+                endDate = new Date(endDate).getTime();
+                console.log(endDate);
+                if (isNaN(endDate)) {
+                    return;
+                }
+                setInterval(calculate, 1000);
+
+                function calculate() {
+                    let startDate = new Date().getTime();
+
+                    let timeRemaining = parseInt((endDate - startDate) / 1000);
+
+                    if (timeRemaining >= 0) {
+                        days = parseInt(timeRemaining / 86400);
+                        timeRemaining = (timeRemaining % 86400);
+
+                        hours = parseInt(timeRemaining / 3600);
+                        timeRemaining = (timeRemaining % 3600);
+
+                        minutes = parseInt(timeRemaining / 60);
+                        timeRemaining = (timeRemaining % 60);
+
+                        seconds = parseInt(timeRemaining);
+
+                        document.getElementById("days").innerHTML = parseInt(days, 10);
+                        document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+                        document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+                        document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+                    }
+                }
+            }
+
+            (function () {
+                countdown(<?php echo $config->next_event_timestamp ?>000);
+            }());
+        </script>
+    <?php }
+}?>
 <?php include 'templates/footer.php'; ?>
