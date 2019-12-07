@@ -129,11 +129,11 @@ require "templates/header.php";?>
 
 <?php if (isset($_POST['submit']) && isset($created)) :
     echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiunta con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
-endif; ?>
-<?php if (isset($_POST['submit']) && isset($updated)) :
+
+elseif (isset($_POST['submit']) && isset($updated)) :
     echo '<blockquote>Storia su "' . escape($_POST['title']) . '" aggiornata con successo. <a href="post.php?id=' . escape($postid) . '"> Puoi vederla e aggiungere foto cliccando qui 📖</a></blockquote>';
-endif; ?>
-<?php if (isset($_POST['submit']) && !$statement) : ?>
+
+elseif (isset($_POST['submit']) && !isset($statement)) : ?>
     <blockquote>"<?php echo escape($_POST['title']); ?>" non aggiunta.</blockquote>
 <?php endif; ?>
 

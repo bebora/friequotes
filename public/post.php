@@ -117,17 +117,18 @@ include 'templates/header.php';
                 <br><br>
             </div>
         </form>
-
+    <?php }
+     if ($can_edit && isset($_GET['id'])) {?>
+         <form method="GET" action="newpost.php">
+             <input type="hidden" name="postid" value="<?php echo $_GET['id'] ?>">
+             <button type="submit" id="edit-button">Modifica post ✏</button>
+         </form>
     <?php }
     if ($can_delete) {?>
         <form id="delete-form" method="POST" onsubmit="return confirm('Vuoi davvero cancellare il post?');">
             <button type="submit" id="delete-button" name="submit">Cancella post ❌</button>
         </form>
     <?php } ?>
-    <?php if ($can_edit && isset($_GET['id'])) {?>
-        <a style="margin-bottom: 300px;" href="newpost.php?postid=<?php echo $_GET['id'] ?>">Modifica post ✏️</a>
-    <?php }?>
-
     <br><br>
     <?php if ($can_upload_media) { ?>
         <script defer src="data:text/javascript, uploadmedia('postmedia'); "></script>
