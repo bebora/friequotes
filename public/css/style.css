@@ -41,7 +41,6 @@ body {
 }
 .userphoto {
     object-fit: cover;
-    border-radius: 50%;
     height: 100%;
     width: 100%;
     border: #888 solid 2px;
@@ -213,7 +212,6 @@ html, body {
 
 .userthumb {
     object-fit: cover;
-    border-radius: 50%;
     max-width: 200px;
     border: #888 solid 2px;
     background-color: #fff;
