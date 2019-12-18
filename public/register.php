@@ -17,12 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo 'Invalid CSRF';
             die();
         }
-        if (isset($_POST['password']) && isset($_POST['name'])) {
+        if (isset($_POST['password']) && isset($_POST['name']) && trim($_POST['name']) != '') {
+            $post_name = trim($_POST['name']);
             $db = get_db();
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if (is_user_table_empty()) {
                 $admin = array(
-                    "username" => $_POST["name"],
+                    "username" => $post_name,
                     "password" => password_hash($_POST["password"], PASSWORD_BCRYPT),
                     "auth_level" => LoginLevel::ADMIN
                 );
@@ -37,11 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //Get new user id
                 $sql = "SELECT * FROM users WHERE username = :username";
                 $stm = $db->prepare($sql);
-                $stm->execute(array(":username" => $_POST["name"]));
+                $stm->execute(array(":username" => $post_name));
                 $addeduser = $stm->fetch();
                 set_login_cookie($addeduser["userid"]);
                 header("Location: /index.php");
-                echo "Registered successfully ad admin";
+                echo "Registered successfully as admin";
                 die();
             }
             else {
@@ -57,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($result != null) {
                         $sql = "SELECT * FROM users WHERE username = :username";
                         $stm = $db->prepare($sql);
-                        $stm->execute(array(":username" => $_POST["name"]));
+                        $stm->execute(array(":username" => $post_name));
                         $resultuser = $stm->fetch();
                         if ($resultuser == null) {
                             $new_user = array(
-                                "username" => $_POST["name"],
+                                "username" => $post_name,
                                 "password" => password_hash($_POST["password"], PASSWORD_BCRYPT),
                                 "auth_level" => $result["grantlevel"]
                             );
@@ -76,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             //Get new user id
                             $sql = "SELECT * FROM users WHERE username = :username";
                             $stm = $db->prepare($sql);
-                            $stm->execute(array(":username" => $_POST["name"]));
+                            $stm->execute(array(":username" => $post_name));
                             $addeduser = $stm->fetch();
                             //Invite link should be removed after successful registration
                             $sql = 'DELETE from invitetokens WHERE token = :token';

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $connection = $db->prepare("SELECT * 
                                                   FROM users
                                                   WHERE username = :username");
-            $connection->execute(array(":username" => $_POST['name']));
+            $connection->execute(array(":username" => trim($_POST['name'])));
             $result = $connection->fetchAll();
             if (count($result) < 1) {
                 header('Location: '. "/login.php");
