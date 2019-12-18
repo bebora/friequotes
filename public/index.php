@@ -33,10 +33,10 @@ include 'templates/header.php';
 <br>
 <br>
 <?php //Show countdown if configured
-if (isset($config->next_event_name) && isset($config->next_event_timestamp)) {
-    if (time() < $config->next_event_timestamp) { ?>
-        <h1>Countdown <?php echo $config->next_event_name ?></h1>
-        <div class="parentcountdown">
+if (isset($config->next_event->name) && isset($config->next_event->timestamp)) {
+    if (time() < $config->next_event->timestamp) { ?>
+        <h1>Countdown <?php echo $config->next_event->name ?></h1>
+        <div class="parentcountdown" id="parentcountdown">
             <div class="childcountdown">
                 <div id="days" style="font-size: 52px">--</div>
                 <div class="line-break"></div>
@@ -58,18 +58,17 @@ if (isset($config->next_event_name) && isset($config->next_event_timestamp)) {
                 <div>Secondi</div>
             </div>
         </div>
-        <img src="<?php echo $config->next_event_image ?>" style="width: 100%" alt="<?php echo $config->next_event_name ?>">
+        <img src="<?php echo $config->next_event->image ?>" style="width: 100%" alt="<?php echo $config->next_event->name ?>">
         <script>
             //https://gist.github.com/adriennetacke/f5a25c304f1b7b4a6fa42db70415bad2#file-countdown-js
             function countdown(endDate) {
                 let days, hours, minutes, seconds;
 
                 endDate = new Date(endDate).getTime();
-                console.log(endDate);
                 if (isNaN(endDate)) {
                     return;
                 }
-                setInterval(calculate, 1000);
+                let intervalHandle = setInterval(calculate, 1000);
 
                 function calculate() {
                     let startDate = new Date().getTime();
@@ -93,11 +92,15 @@ if (isset($config->next_event_name) && isset($config->next_event_timestamp)) {
                         document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
                         document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
                     }
+                    else {
+                        document.getElementById("parentcountdown").innerHTML = '<h2><?php echo $config->next_event->end_phrase ?></h2>';
+                        clearInterval(intervalHandle);
+                    }
                 }
             }
 
             (function () {
-                countdown(<?php echo $config->next_event_timestamp ?>000);
+                countdown(<?php echo $config->next_event->timestamp ?>000);
             }());
         </script>
     <?php }
