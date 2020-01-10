@@ -30,7 +30,7 @@ if(isset($_COOKIE['token'])) {
     $inforesult = $infostm->fetch();
     if ($inforesult != null) {
         echo sprintf('<span style="float: right;"><a href="login.php" title="Loggati come un altro utente">%s - %s</a><a href="logout.php" style="margin-left: 20px; margin-right: 5px;">Esci</a></span>',
-            $inforesult['username'],
+            escape($inforesult['username']),
             array('Guest 👀', 'Utente 👤', 'Moderatore 👮', 'Admin 👑')[$inforesult['auth_level']]);
     }
 }

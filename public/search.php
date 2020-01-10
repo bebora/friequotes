@@ -74,7 +74,7 @@ if (isset($_GET['query'])) {
 ?>
 <?php
 $config = get_config();
-$pageTitle = 'Ricerca ' . $config->sitename;
+$pageTitle = escape('Ricerca ' . $config->sitename);
 include 'templates/header.php';
 if (!isset($_GET['noheading'])) {
 ?>

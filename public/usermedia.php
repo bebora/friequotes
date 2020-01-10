@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 <?php
-$pageTitle = $name . " - Media";
+$pageTitle = escape($name . " - Media");
 $scripts = '<script src="scripts/upload.js" defer></script>
             <script src="scripts/removemedia.js" defer></script>';
 $extrastyle = '<link rel="stylesheet" href="css/usermedia.css">';

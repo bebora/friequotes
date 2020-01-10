@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <?php
-$pageTitle = $resultPost['title'];
+$pageTitle = escape($resultPost['title']);
 $scripts = '<script src="scripts/upload.js" defer></script>
             <script src="scripts/removemedia.js" defer></script>';
 $extrastyle = '<link rel="stylesheet" type="text/css" href="css/usermedia.css">';

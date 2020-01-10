@@ -26,7 +26,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 <?php
-$pageTitle = '#' . $tagname;
+$pageTitle = escape('#' . $tagname);
 include 'templates/header.php';
 ?>
     <h2>Post taggati con #<?php echo escape($tagname) ?></h2>
