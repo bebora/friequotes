@@ -75,7 +75,7 @@ function render_token($token) {
         </tr>
         ', $token['token'],
         $grantlevel_to_string[$token['grantlevel']],
-        $author_info['username'],
+        escape($author_info['username']),
         $token['created'],
         '❌'
     );
@@ -148,7 +148,7 @@ function render_hashtag($item) {
     return sprintf('
         <a href="hashtagfeed.php?id=%d"><span class="hashtag">#%s</span></a>',
         $item['id'],
-        $item['name']
+        escape($item['name'])
     );
 }
 
