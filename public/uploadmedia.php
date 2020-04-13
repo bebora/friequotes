@@ -205,6 +205,7 @@ if ($uploadOk == 0) {
             $statement->bindParam(':path', $finalName, PDO::PARAM_STR);
             $statement->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
             $statement->execute();
+            createThumbnail($_FILES["fileToUpload"]["tmp_name"], SITE_ROOT . '/uploads/thumbs/' . $finalName , 200);
         }
         if ($_POST['type'] == 'usermedia' && isset($_POST['id'])) {
             $pathname = SITE_ROOT . $target_dir . $typefolder[$_POST['type']] .$finalName;
@@ -241,9 +242,19 @@ if ($uploadOk == 0) {
             $statement->execute($new_media);
         }
     }
+    if ($imageFileType === 'jpg' || $imageFileType === 'jpeg') {
+        try {
+            $src = $_FILES["fileToUpload"]["tmp_name"];
+            $img = new Imagick($src);
+            $img->setInterlaceScheme(Imagick::INTERLACE_PLANE);
+            $img->writeImage($src);
+        }
+        catch (ImagickException $e) {
+            echo "Can't optimize the image.";
+        }
+    }
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $pathname)) {
         echo "The file " . escape(basename( $_FILES["fileToUpload"]["name"])) . " has been uploaded.";
-        createThumbnail($pathname, SITE_ROOT . '/uploads/thumbs/' . $finalName , 200);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-modules=( gd pdo_sqlite exif)
+modules=( gd pdo_sqlite exif imagick)
 for i in "${modules[@]}"
 do
 	:
