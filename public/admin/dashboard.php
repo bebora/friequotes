@@ -1,7 +1,7 @@
 <?php
 
-require '../common.php';
-require "../render.php";
+require '../../common.php';
+require "../../render.php";
 check_token(LoginLevel::ADMIN);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -10,8 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die();
     }
     /**
-     * 3 different requests to handle with different params:
-     * -Change user permission level: userid, authlevel
+     * 2 different requests to handle with different params:
      * -Create invite token: grantlevel
      * -Remove invite token: revoketoken
      */
@@ -55,27 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stm = $db->prepare($sql);
         $stm->execute(array(":token" => $_POST['revoketoken']));
     }
-    elseif (isset($_POST['authlevel'])) {
-        $new_level = $_POST['authlevel'];
-        if ($new_level < 0)
-            $new_level = 0;
-        if ($new_level > 3)
-            $new_level = 3;
-        $db = get_db();
-        $update = array(
-            ":authlevel" => $_POST['authlevel'],
-            ":userid" => $_POST['userid']
-        );
-        $sql = 'UPDATE users
-                SET auth_level = :authlevel
-                WHERE userid = :userid';
-        $stm = $db->prepare($sql);
-        $stm->execute($update);
-    }
 }
 
 $pageTitle = 'Dashboard inviti';
-include 'templates/header.php';?>
+include '../templates/header.php';?>
 <div>
     <div>
         <h3>
@@ -84,7 +66,8 @@ include 'templates/header.php';?>
     </div>
     <div>
         <form method='POST'>
-            <select name='grantlevel'>
+            <label for="grantlevel">Livello nuovo utente</label>
+            <select name='grantlevel' id="grantlevel">
                 <option value='0'>Guest</option>
                 <option value='1'>Utente</option>
                 <option value='2'>Moderatore</option>
@@ -112,7 +95,7 @@ $sql = 'SELECT *
 $stm = $db->prepare($sql);
 $stm->execute();
 $result = $stm->fetchAll();
-echo render_users_dashboard($result, count($result));?>
+echo render_users_list($result, count($result));?>
 <script>
     function copyToClipboard(e) {
         let token = e.innerText;
@@ -138,10 +121,6 @@ echo render_users_dashboard($result, count($result));?>
         xhr.send(formData);
         location.reload();
     }
-    function updateLevel(e) {
-        let form = document.getElementById(e.attributes['data-form'].value);
-        form.submit();
-    }
 </script>
 <?php
-include 'templates/footer.php';
+include '../templates/footer.php';

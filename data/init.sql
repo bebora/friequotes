@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"userid"	INTEGER,
 	"auth_level"	INTEGER NOT NULL,
 	"password"	TEXT NOT NULL DEFAULT 'changeme',
+    "reset_token" TEXT,
 	PRIMARY KEY("userid")
 );
 CREATE TABLE IF NOT EXISTS "entitiesmedia" (

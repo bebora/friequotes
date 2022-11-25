@@ -27,7 +27,7 @@ include 'templates/header.php';
     <li><a href="feed.php"><strong>📰 Leggi ultimi post</strong></a></li>
     <li><a href="search.php?query=@&noheading=true"><strong>👥 Elenco personaggi</strong></a></li>
     <?php if ($is_admin) {?>
-    <li><a href="dashboard.php"><strong>⚙️ Dashboard</strong></a></li>
+    <li><a href="admin/dashboard.php"><strong>⚙️ Dashboard</strong></a></li>
     <?php }?>
 </ul>
 <br>
