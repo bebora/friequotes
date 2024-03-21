@@ -29,7 +29,7 @@ Friequotes ha 4 tipi diversi di utenti, ognuno con certi permessi e restrizioni 
 Per registrarsi è necessario ricevere un link di invito dall'admin, che sceglie i permessi del nuovo utente in fase di creazione del link.  
 Quando non c'è nessun utente registrato, allora il primo utente a registrarsi sarà admin e non avrà bisogno di link di invito per procedere.
 
-Ogni utente può scegliere username (con il vincolo di non avere due username uguali fra più utenti) e password. La password è conservata come hash Bcrypt. Attualmente non è possibile cambiare password.
+Ogni utente può scegliere username (con il vincolo di non avere due username uguali fra più utenti) e password. La password è conservata come hash Bcrypt. Attualmente non è possibile cambiare password autonomamente, ma l'admin può generare un link di reset password.
 
 ## Installazione
 Friequotes è testato solo su Linux con PHP 7.  
